@@ -1,7 +1,9 @@
 ---
-title: deneme 6 with slug
+date: "2017-11-01T12:04:16-05:00"
 author: Ali Guner
-date: '2021-12-26'
-categories: []
-tags: []
+tags:
+- coffee
+- ipsum
+- images
+title: deneme-6 with slug
 ---
