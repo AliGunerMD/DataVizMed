@@ -93,6 +93,7 @@ languages:
     languageCode: tr
     languageName: Turkish
     params:
+      dateFormat: 2 January 2006
       description: Site tanımlaması
     title: Giriş
     weight: 1
