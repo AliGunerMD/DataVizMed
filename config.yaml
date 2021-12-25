@@ -1,0 +1,98 @@
+baseURL: http://example.com/
+theme: hugo-chairome
+DefaultContentLanguage: en
+params:
+  blog:
+    citation: yes
+  dateFormat: Jan 2, 2006
+  email: youremail@email.com
+  fadeIn: yes
+  fadeInIndex: no
+  favicon: /img/fav.ico
+  giscus:
+    category: Comments
+    category-id: enter-category-id
+    emit-metadata: '0'
+    lang: en
+    mapping: pathname
+    reactions-enabled: '1'
+    repo-id: enter-repo-id
+    theme: light
+  home:
+    introHeight: fullheight
+    localTime: yes
+    numberOfProjectsToShow: 3
+    showAllPosts: yes
+    showLatest: yes
+    timeFormat: en-US
+    timeZone: America/Los_Angeles
+  logo: /img/logo-light.png
+  logo_size: 10%
+  postStyle: hex
+  projects:
+    useTwoColumns: no
+  share:
+    facebook: yes
+    googlePlus: yes
+    pinterest: yes
+    twitter: yes
+  showRSSButton: no
+  social:
+    - icon: twitter
+      icon_pack: fab
+      url: https://twitter.com/
+    - icon: facebook-f
+      icon_pack: fab
+      url: https://facebook.com/
+    - icon: linkedin-in
+      icon_pack: fab
+      url: https://linkedin.com/
+    - icon: paper-plane
+      icon_pack: fas
+      url: mailto:youremail@email.com
+    - html_attributes: rel="me"
+      icon: mastodon
+      icon_pack: fab
+      url: https://mastodon.social/
+  themeStyle: light
+taxonomies:
+  series: series
+  tag: tags
+markup:
+  defaultMarkdownHandler: goldmark
+  goldmark:
+    renderer:
+      unsafe: yes
+  highlight:
+    codeFences: yes
+    guessSyntax: no
+    hl_Lines: ''
+    lineNoStart: 1
+    lineNos: no
+    lineNumbersInTable: yes
+    noClasses: yes
+    style: friendly
+    tabWidth: 4
+languages:
+  de:
+    languageCode: de
+    languageName: Deutsch
+    params:
+      dateFormat: 2. January 2006
+      description: Beschreibung der Webseite
+    title: Vorstellung
+    weight: 2
+  en:
+    languageCode: en-us
+    languageName: English
+    params:
+      description: Website Description
+    title: Introduction
+    weight: 0
+  es:
+    languageCode: es
+    languageName: Español
+    params:
+      description: Descripcion del sitio web
+    title: Introducción
+    weight: 1
