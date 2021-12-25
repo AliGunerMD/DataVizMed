@@ -2,7 +2,7 @@
 title: deneme 7
 author: Ali Guner
 date: '2021-12-26'
-slug: []
+slug: deneme-7
 categories: []
 tags: []
 draft: yes
