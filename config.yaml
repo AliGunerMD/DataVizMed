@@ -90,9 +90,9 @@ languages:
     title: Introduction
     weight: 0
   es:
-    languageCode: es
-    languageName: Español
+    languageCode: tr
+    languageName: Turkish
     params:
-      description: Descripcion del sitio web
-    title: Introducción
+      description: Site tanımlaması
+    title: Giriş
     weight: 1
