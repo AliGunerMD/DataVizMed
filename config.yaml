@@ -89,7 +89,7 @@ languages:
       description: Website Description
     title: Introduction
     weight: 0
-  es:
+  tr:
     languageCode: tr
     languageName: Turkish
     params:
