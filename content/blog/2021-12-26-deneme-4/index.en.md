@@ -7,5 +7,6 @@ categories:
   - R
 tags:
   - code
+title: deneme 4.5
 ---
 addf
