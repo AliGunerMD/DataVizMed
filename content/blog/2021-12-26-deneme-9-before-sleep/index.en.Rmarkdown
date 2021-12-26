@@ -1,0 +1,69 @@
+---
+title: deneme 9 before sleep
+author: Ali Guner
+date: 2021-12-26T03:01:50+0300
+slug: []
+categories: []
+tags: []
+---
+
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%")
+```
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(readxl))
+suppressPackageStartupMessages(library(skimr))
+suppressPackageStartupMessages(library(pander))
+suppressPackageStartupMessages(library(janitor))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(kableExtra))
+suppressPackageStartupMessages(library(naniar))
+suppressPackageStartupMessages(library(finalfit))
+suppressPackageStartupMessages(library(scales))
+suppressPackageStartupMessages(library(RColorBrewer))
+suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(flextable))
+suppressPackageStartupMessages(library(officer))
+
+
+
+theme_set(theme_light())
+
+suppressPackageStartupMessages(library(lubridate))
+suppressPackageStartupMessages(library(glue))
+suppressPackageStartupMessages(library(snakecase))
+# suppressPackageStartupMessages(library(tidylog))
+suppressPackageStartupMessages(library(tidytext))
+suppressPackageStartupMessages(library(epiR))
+
+
+
+autonum <- run_autonum()
+
+myblues5 <- "#6BAED6"
+myblues6 <- "#4292C6"
+myblues <- c("#F7FBFF", "#DEEBF7", "#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5" ,"#084594")
+# Brewer Blues : [1] "#F7FBFF" "#DEEBF7" "#C6DBEF" "#9ECAE1" "#6BAED6" "#4292C6" "#2171B5" "#084594" 
+# display.brewer.pal(8, "Blues")
+```
+sect_properties_landscape <- prop_section(
+  page_size = page_size(orient = "landscape",
+    width = 8.3, height = 11.7),
+  type = "nextPage",
+  page_margins = page_mar()
+)
+
+
+```{r setup, include=FALSE}
+
+sect_properties_portrait <- prop_section(
+  page_size = page_size(orient = "portrait",
+    width = 11.7, height = 8.3),
+  type = "nextPage",
+  page_margins = page_mar()
+)
+
+```
