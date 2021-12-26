@@ -1,10 +1,11 @@
 ---
-title: "deneme 9 before sleep"
-author: "Ali Guner"
-date: "2021-12-26T03:01:50+0300"
-
+title: deneme 9 bef sleep
+author: Ali Guner
+date: "2021-12-26T12:04:16-05:00"
+categories: []
+tags: []
 ---
-
+sdsdds
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%")
