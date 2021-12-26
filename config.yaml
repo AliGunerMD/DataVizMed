@@ -1,6 +1,6 @@
-baseURL: "https://datavizmed.netlify.app/"
-theme: "hugo-chairome"
-DefaultContentLanguage: "en"
+baseURL: https://datavizmed.netlify.app/
+theme: hugo-chairome
+DefaultContentLanguage: en
 params:
   blog:
     citation: yes
