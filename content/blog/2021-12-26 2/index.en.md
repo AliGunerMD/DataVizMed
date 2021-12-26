@@ -5,5 +5,7 @@ tags:
 - coffee
 - ipsum
 - images
-title: deneme-6 with slug
+title: deneme-6 with slug 2nd
 ---
+
+title: deneme-6 with slug 2nd
