@@ -1,6 +1,6 @@
 ---
 title: "deneme 10 oldu bu"
-author: Ali Guner
+author: "Ali Guner"
 date: 2021-12-26T04:13:11+0300
 slug: []
 categories: []
