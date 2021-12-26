@@ -10,14 +10,11 @@ title: "deneme-9 with slug 2nd"
 sdsdds
 
 
-
-
-
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, out.width = "100%")
 ```
 
-```{r setup, include=FALSE}
+```{r , include=FALSE}
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(readxl))
 suppressPackageStartupMessages(library(skimr))
@@ -40,19 +37,13 @@ theme_set(theme_light())
 suppressPackageStartupMessages(library(lubridate))
 suppressPackageStartupMessages(library(glue))
 suppressPackageStartupMessages(library(snakecase))
-# suppressPackageStartupMessages(library(tidylog))
-suppressPackageStartupMessages(library(tidytext))
-suppressPackageStartupMessages(library(epiR))
 
 
 
-autonum <- run_autonum()
 
-myblues5 <- "#6BAED6"
-myblues6 <- "#4292C6"
-myblues <- c("#F7FBFF", "#DEEBF7", "#C6DBEF", "#9ECAE1", "#6BAED6", "#4292C6", "#2171B5" ,"#084594")
-# Brewer Blues : [1] "#F7FBFF" "#DEEBF7" "#C6DBEF" "#9ECAE1" "#6BAED6" "#4292C6" "#2171B5" "#084594" 
-# display.brewer.pal(8, "Blues")
+
+
+
 ```
 sect_properties_landscape <- prop_section(
   page_size = page_size(orient = "landscape",
