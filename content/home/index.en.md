@@ -1,6 +1,6 @@
 ---
-title: "Chairome!"
+title: "DataVizMed"
 headless: true
 ---
 
-Nice to meet you!
+**Data** **Vi**suali**Z**ation in **Med**icine

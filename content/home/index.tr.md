@@ -1,6 +1,6 @@
 ---
-title: "Chairome"
+title: "DataVizMed"
 headless: true
 ---
 
-Veri görselleştirme
+Tıbbı Bilimlerde Veri Görselleştirme

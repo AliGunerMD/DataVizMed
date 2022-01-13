@@ -27,7 +27,7 @@ params:
     timeFormat: en-US
     timeZone: America/Los_Angeles
   logo: /img/logo_small.png  # in static/img folder: for main page
-  logo_size: 10%
+  logo_size: 15%
   postStyle: hex
   projects:
     useTwoColumns: no
@@ -40,20 +40,23 @@ params:
   social:
     - icon: twitter
       icon_pack: fab
-      url: https://twitter.com/
-    - icon: facebook-f
+      url: https://twitter.com/DataVizMed/
+    # - icon: facebook-f
+    #   icon_pack: fab
+    #   url: https://facebook.com/
+    # - icon: linkedin-in
+    #   icon_pack: fab
+    #   url: https://linkedin.com/
+    - icon: github
       icon_pack: fab
-      url: https://facebook.com/
-    - icon: linkedin-in
-      icon_pack: fab
-      url: https://linkedin.com/
-    - icon: paper-plane
-      icon_pack: fas
-      url: mailto:youremail@email.com
-    - html_attributes: rel="me"
-      icon: mastodon
-      icon_pack: fab
-      url: https://mastodon.social/
+      url: https://github.com/AliGunerMD/DataVizMed/
+    # - icon: paper-plane
+    #   icon_pack: fas
+    #   url: mailto:youremail@email.com
+    # - html_attributes: rel="me"
+    #   icon: mastodon
+    #   icon_pack: fab
+    #   url: https://mastodon.social/
   themeStyle: light
 taxonomies:
   series: series
