@@ -5,7 +5,7 @@ params:
   blog:
     citation: yes
   dateFormat: Jan 2, 2006
-  email: youremail@email.com
+  email: draliguner@yahoo.com
   fadeIn: yes
   fadeInIndex: no
   favicon: /img/fav.ico
@@ -26,13 +26,13 @@ params:
     showLatest: yes
     timeFormat: en-US
     timeZone: America/Los_Angeles
-  logo: /img/logo-small.png
+  logo: /img/logo_small.png  # in static/img folder: for main page
   logo_size: 10%
   postStyle: hex
   projects:
     useTwoColumns: no
   share:
-    facebook: yes
+    facebook: no
     googlePlus: yes
     pinterest: yes
     twitter: yes
@@ -74,14 +74,6 @@ markup:
     style: friendly
     tabWidth: 4
 languages:
-  # de:
-  #   languageCode: de
-  #   languageName: Deutsch
-  #   params:
-  #     dateFormat: 2. January 2006
-  #     description: Beschreibung der Webseite
-  #   title: Vorstellung
-  #   weight: 2
   en:
     languageCode: en-us
     languageName: English
@@ -89,7 +81,16 @@ languages:
       description: Website Description
       dateFormat: Jan 2, 2006
     title: Introduction
-    weight: 0
+    weight: 10
+  # de:
+  #   languageCode: de
+  #   languageName: Deutsch
+  #   params:
+  #     dateFormat: 2. January 2006
+  #     description: Beschreibung der Webseite
+  #   title: Vorstellung
+  #   weight: 20
+
   tr:
     languageCode: tr
     languageName: Turkish
@@ -97,4 +98,4 @@ languages:
       dateFormat: 2 January 2006
       description: Site tanımlaması
     title: Giriş
-    weight: 1
+    weight: 30
