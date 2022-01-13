@@ -4,11 +4,16 @@ type: home
 weight: 10
 ---
 
-I m **DataVizMed**, a part of *AcadeMD Project*..   
+I m 
+## **DataVizMed** 
+a part of 
+### **AcadeMD Project**   
+  
+    
 
 The aims of the current website are  
 
-## to   
+#### *to*   
 
  share informative, elegant visualization from high-quality articles  
  prepare a replica of the published visualization by using fabricated data and R  
