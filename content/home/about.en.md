@@ -9,11 +9,9 @@ I m
 a part of 
 ### **AcadeMD Project**   
   
-    
+ <br><br>
 
-The aims of the current website are  
-
-#### *to*   
+<u>The aims</u>
 
  share informative, elegant visualization from high-quality articles  
  prepare a replica of the published visualization by using fabricated data and R  
