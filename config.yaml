@@ -26,7 +26,7 @@ params:
     showLatest: yes
     timeFormat: en-US
     timeZone: America/Los_Angeles
-  logo: /img/logo-light.png
+  logo: /img/logo-small.png
   logo_size: 10%
   postStyle: hex
   projects:
@@ -74,19 +74,20 @@ markup:
     style: friendly
     tabWidth: 4
 languages:
-  de:
-    languageCode: de
-    languageName: Deutsch
-    params:
-      dateFormat: 2. January 2006
-      description: Beschreibung der Webseite
-    title: Vorstellung
-    weight: 2
+  # de:
+  #   languageCode: de
+  #   languageName: Deutsch
+  #   params:
+  #     dateFormat: 2. January 2006
+  #     description: Beschreibung der Webseite
+  #   title: Vorstellung
+  #   weight: 2
   en:
     languageCode: en-us
     languageName: English
     params:
       description: Website Description
+      dateFormat: Jan 2, 2006
     title: Introduction
     weight: 0
   tr:
