@@ -95,11 +95,11 @@ languages:
   #   title: Vorstellung
   #   weight: 20
 
-  tr:
-    languageCode: tr
-    languageName: Turkish
-    params:
-      dateFormat: 2 January 2006
-      description: Site tanımlaması
-    title: Giriş
-    weight: 30
+  # tr:
+  #   languageCode: tr
+  #   languageName: Turkish
+  #   params:
+  #     dateFormat: 2 January 2006
+  #     description: Site tanımlaması
+  #   title: Giriş
+  #   weight: 30
