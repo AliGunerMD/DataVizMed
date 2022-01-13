@@ -2,17 +2,19 @@
 image: profile.jpg
 title: About
 type: home
-weight: 8
+weight: 10
 ---
 
-This is **Introduction**, a minimalist website theme made for [Hugo](https://gohugo.io).
+I m **DataVizMed**, a part of *AcadeMD Project*..   
 
-### Features
+The aims of the current website are  
 
-* Responsive display on any size screen
-* Light and Dark themes right out of the box
-* Multilingual - supports side-by-side content in multiple languages
-* Any number of custom index page sections from Markdown files
-* _Projects_ section with any number of projects: highly configurable as a photo gallery, modals, or external links
-* _Blog_ section with optional _Latest Post_, on the main page or as a separate section
-* Styled Markdown throughout with support for Hugo's syntax highlighting
+### To   
+
+* share informative, elegant visualization from high-quality articles, 
+* prepare a replica of the published visualization by using fabricated data, 
+* implement (and share) powerful R packages with reproducible R codes, 
+* improve literate programming, 
+* improve reproducible research, 
+* improve reporting of clinical experimental/observational studies, 
+* disseminate the aforementioned improvements..

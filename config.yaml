@@ -81,10 +81,11 @@ languages:
     languageCode: en-us
     languageName: English
     params:
-      description: Website Description
+      description: Data Visualization in Medicine
       dateFormat: Jan 2, 2006
     title: Introduction
     weight: 10
+    
   # de:
   #   languageCode: de
   #   languageName: Deutsch
