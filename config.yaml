@@ -1,4 +1,3 @@
-title: DataVizMed
 baseURL: https://datavizmed.netlify.app/
 theme: hugo-chairome
 DefaultContentLanguage: en
@@ -84,7 +83,7 @@ languages:
     params:
       description: Data Visualization in Medicine
       dateFormat: Jan 2, 2006
-    title: Introduction
+    title: DataVizMed
     weight: 10
     
   # de:
@@ -93,7 +92,7 @@ languages:
   #   params:
   #     dateFormat: 2. January 2006
   #     description: Beschreibung der Webseite
-  #   title: Vorstellung
+  #   title: DataVizMed
   #   weight: 20
 
   # tr:
@@ -101,6 +100,6 @@ languages:
   #   languageName: Turkish
   #   params:
   #     dateFormat: 2 January 2006
-  #     description: Site tanımlaması
-  #   title: Giriş
+  #     description: Sağlık bilimlerinde veri görselleştirme
+  #   title: DataVizMed
   #   weight: 30
