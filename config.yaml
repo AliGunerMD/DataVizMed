@@ -1,5 +1,5 @@
+title: DataVizMed
 baseURL: https://datavizmed.netlify.app/
-# title: DataVizMed
 theme: hugo-chairome
 DefaultContentLanguage: en
 params:
