@@ -4,10 +4,10 @@ type: home
 weight: 10
 ---
 
-I m 
-## **DataVizMed** 
-a part of 
-### **AcadeMD Project**   
+<h1 style="color:#A02E2F;">DataVizMed</h1>  
+
+is a part of   
+#### **AcadeMD Project**   
   
  <br><br>
 
@@ -18,7 +18,11 @@ a part of
  implement (and share) powerful R packages with reproducible R codes  
  improve literate programming  
  improve reproducible research  
- improve reporting of clinical experimental/observational studies   
+ improve reporting of clinical experimental/observational studies  
+ 
+   <br>  
+ <u>and also</u>   
+ 
  improve statistical modeling and interpretation  
  improve study flow  
  disseminate the aforementioned improvements  
