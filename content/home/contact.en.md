@@ -34,21 +34,21 @@ weight: 100
       <textarea id="message" name="message" cols="40" rows="10" required="required" class="form-control"></textarea>
     </div>
   </div>
-  
-  
-<html>
+  <html>
   <head>
     <title>reCAPTCHA demo: Simple page</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body>
-    <form action="?" method="POST">
-      <div class="g-recaptcha" data-sitekey="6LfwoyAeAAAAAFO8fuhGuGXSGzlMEHUd-vdd9LQr"></div>
+    <form action="https://formspree.io/f/moqrjlze" method="POST">
+      <input type="email" name="email" placeholder="email@example.com" />
+      <div class="g-recaptcha" data-sitekey="6LfwoyAeAAAAAFO8fuhGuGXSGzlMEHUd-vdd9LQr"></div> <!-- replace with your recaptcha SITE key not secret key -->
       <br/>
       <input type="submit" value="Submit">
     </form>
   </body>
 </html>
+
   
 </form>
 
