@@ -45,7 +45,7 @@ weight: 100
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body>
-    <form action="https://formspree.io/f/{form_id}" method="POST">
+    <form action="https://formspree.io/f/moqrjlze" method="POST">
       <input type="email" name="email" placeholder="email@example.com" />
       <div class="g-recaptcha" data-sitekey="6LfwoyAeAAAAAFO8fuhGuGXSGzlMEHUd-vdd9LQr"></div> <!-- replace with your recaptcha SITE key not secret key -->
       <br/>
