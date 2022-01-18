@@ -41,7 +41,6 @@ weight: 100
   </head>
   <body>
     <form action="https://formspree.io/f/moqrjlze" method="POST">
-      <input type="email" name="email" placeholder="email@example.com" />
       <div class="g-recaptcha" data-sitekey="6LfwoyAeAAAAAFO8fuhGuGXSGzlMEHUd-vdd9LQr"></div> <!-- replace with your recaptcha SITE key not secret key -->
       <br/>
       <input type="submit" value="Submit">
