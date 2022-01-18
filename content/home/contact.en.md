@@ -32,13 +32,8 @@ weight: 100
     <div class="col-8">
       <textarea id="message" name="message" cols="40" rows="10" required="required" class="form-control"></textarea>
     </div>
-  </div>
-  <div class="form-group row">
-    <div class="offset-4 col-8">
-      <button name="submit" type="submit" class="btn btn-primary">Send</button>
-    </div>
-  </div>
 </form>
+
 <html>
   <head>
     <title>reCAPTCHA demo: Simple page</title>
@@ -46,7 +41,6 @@ weight: 100
   </head>
   <body>
     <form action="https://formspree.io/f/moqrjlze" method="POST">
-      <input type="email" name="email" placeholder="email@example.com" />
       <div class="g-recaptcha" data-sitekey="6LfwoyAeAAAAAFO8fuhGuGXSGzlMEHUd-vdd9LQr"></div> <!-- replace with your recaptcha SITE key not secret key -->
       <br/>
       <input type="submit" value="Submit">
