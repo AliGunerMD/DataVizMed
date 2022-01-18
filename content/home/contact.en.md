@@ -17,17 +17,7 @@ weight: 100
       </div>
     </div>
   </div>
-  <div class="form-group row">
-    <label for="email" class="col-4 col-form-label">E-mail address</label>
-    <div class="col-8">
-      <div class="input-group">
-        <div class="input-group-addon">
-          <i class="fa fa-envelope"></i>
-        </div>
-        <input id="email" name="email" placeholder="Your e-mail address" type="text" required="required" class="form-control">
-      </div>
-    </div>
-  </div>
+ 
   <div class="form-group row">
     <label for="message" class="col-4 col-form-label">Message</label>
     <div class="col-8">
@@ -41,6 +31,7 @@ weight: 100
   </head>
   <body>
     <form action="https://formspree.io/f/moqrjlze" method="POST">
+      <input type="email" name="email" placeholder="email@example.com" />
       <div class="g-recaptcha" data-sitekey="6LfwoyAeAAAAAFO8fuhGuGXSGzlMEHUd-vdd9LQr"></div> <!-- replace with your recaptcha SITE key not secret key -->
       <br/>
       <input type="submit" value="Submit">
