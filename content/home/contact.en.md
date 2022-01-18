@@ -32,9 +32,13 @@ weight: 100
     <div class="col-8">
       <textarea id="message" name="message" cols="40" rows="10" required="required" class="form-control"></textarea>
     </div>
-</form>
-
-<html>
+    
+  </div>
+  <div class="form-group row">
+  
+  
+  <div class="offset-4 col-8">
+    <html>
   <head>
     <title>reCAPTCHA demo: Simple page</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -47,3 +51,7 @@ weight: 100
     </form>
   </body>
 </html>
+     
+  </div>
+</form>
+
