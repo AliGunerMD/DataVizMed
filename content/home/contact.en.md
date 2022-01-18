@@ -4,6 +4,7 @@ type: home
 weight: 100
 ---
 
+
 <form method="post" action="https://formspree.io/f/moqrjlze">
   <div class="form-group row">
     <label for="name" class="col-4 col-form-label">Name</label>
@@ -32,26 +33,24 @@ weight: 100
     <div class="col-8">
       <textarea id="message" name="message" cols="40" rows="10" required="required" class="form-control"></textarea>
     </div>
-    
   </div>
-  <div class="form-group row">
   
   
-  <div class="offset-4 col-8">
-    <html>
+<html>
   <head>
     <title>reCAPTCHA demo: Simple page</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body>
-    <form action="https://formspree.io/f/moqrjlze" method="POST">
-      <div class="g-recaptcha" data-sitekey="6LfwoyAeAAAAAFO8fuhGuGXSGzlMEHUd-vdd9LQr"></div> <!-- replace with your recaptcha SITE key not secret key -->
+    <form action="?" method="POST">
+      <div class="g-recaptcha" data-sitekey="6LfwoyAeAAAAAFO8fuhGuGXSGzlMEHUd-vdd9LQr"></div>
       <br/>
       <input type="submit" value="Submit">
     </form>
   </body>
 </html>
-     
-  </div>
+  
 </form>
+
+
 
