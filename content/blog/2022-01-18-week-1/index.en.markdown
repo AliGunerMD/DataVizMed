@@ -125,7 +125,7 @@ w1_replica <- tidy_data %>%
                 aes(ymin = mean - sd, ymax = mean + sd), width = .3, size = .3, show.legend = F) + 
   geom_linerange(aes(ymin = mean - sd, ymax = mean + sd), color = "black", size = .3) +
   geom_point(size = 3) +
-  geom_line(aes(group = group), size = .7, show.legend = F) +
+  geom_line(aes(group = group), size = .6, show.legend = F) +
   # scale_color_jama(labels =c("ICS" = "Turned down","OCS_liver" = "Transplanted")) + # JAMA has its own color palette, but I preferred using manual values.
   scale_color_manual(values = c( "ICS" = "#244551","OCS_liver" = "#F28118"), labels =c("ICS" = "Turned down","OCS_liver" = "Transplanted")) +
   scale_y_continuous(breaks = seq(0,14,2), labels = number_format(accuracy = 1)) +
@@ -176,6 +176,9 @@ ggsave(w1_replica,
 
 **Minor:**  
 1. I would not prefer using 1.0, 2.0, 3.0, etc. 1, 2, 3, is ok.  
+
+**Notes:**
 1. The management of tags is ok with [patchwork](https://patchwork.data-imaginist.com/articles/guides/annotation.html) package, and should be done at the end.  
 1. I m not sure about the font. an update may be required.  
+1. figure ratio in the blog is slightly different than the rstudio version.
 <br>
