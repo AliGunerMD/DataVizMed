@@ -32,7 +32,7 @@ params:
   projects:
     useTwoColumns: no
   share:
-    facebook: no
+    facebook: yes
     googlePlus: yes
     pinterest: yes
     twitter: yes
