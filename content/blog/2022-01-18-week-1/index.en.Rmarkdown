@@ -126,7 +126,7 @@ w1_replica <- tidy_data %>%
   geom_linerange(aes(ymin = mean - sd, ymax = mean + sd), color = "black", size = .3) +
   geom_point(size = 3) +
   geom_line(aes(group = group), size = .7, show.legend = F) +
-  # scale_color_jama(labels =c("ICS" = "Turned down","OCS_liver" = "Transplanted")) + # JAMA has its own color palette, but I prefered using manual values.
+  # scale_color_jama(labels =c("ICS" = "Turned down","OCS_liver" = "Transplanted")) + # JAMA has its own color palette, but I preferred using manual values.
   scale_color_manual(values = c( "ICS" = "#244551","OCS_liver" = "#F28118"), labels =c("ICS" = "Turned down","OCS_liver" = "Transplanted")) +
   scale_y_continuous(breaks = seq(0,14,2), labels = number_format(accuracy = 1)) +
   labs(x = "Time on OCS Liver, h",
@@ -158,7 +158,7 @@ w1_replica <- tidy_data %>%
 ggsave(w1_replica,
        filename = "w1_replica.jpg",
        dpi = 300,
-       width = 6,
+       width = 5,
        height = 4)
 ```
 <br>
