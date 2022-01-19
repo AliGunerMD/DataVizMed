@@ -11,6 +11,6 @@ BA, Philosophy
  
 R Enthusiast  
 Data and #DataViz maniac  
-abstract photographer
+abstract photographer  
 minimalist  
 Epicurean  
