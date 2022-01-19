@@ -98,14 +98,6 @@ combined_dataset <-  bind_rows(OCS_liver, ICS) %>%
 ```
 <br>
 
-### the view of a sample from the dataset
-```{r}
-combined_dataset %>% 
-        sample_n(10)
-```
-<br>
-
-
 
 ### Convert possible original dataset to TIDY data
 ```{r}
@@ -125,7 +117,7 @@ tidy_data <- combined_dataset %>%
 <br>
 
 
-### R codes for figure
+### R codes for the figure
 ```{r}
 w1_replica <- tidy_data %>% 
   ggplot(aes(time, mean, color = group)) +

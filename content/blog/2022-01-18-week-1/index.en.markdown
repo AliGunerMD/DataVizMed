@@ -96,33 +96,6 @@ combined_dataset <-  bind_rows(OCS_liver, ICS) %>%
 ```
 <br>
 
-### the view of a sample from the dataset
-
-```r
-combined_dataset %>% 
-        sample_n(10)
-```
-
-```
-## # A tibble: 10 × 14
-##    patient_id group time_0 time_0.5 time_1.0 time_1.5 time_2.0 time_2.5 time_3.0
-##    <chr>      <chr>  <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
-##  1 P_55       OCS_…   8.3      4.91     4.17    -0.11     0.96     3.25    -0.36
-##  2 P_75       OCS_…  11.2      5.9      2.33     3.7      0.62     1.85     2.55
-##  3 P_6        OCS_…  -1.01     1.65    -0.32     0.96     0.28     3.37    -0.78
-##  4 P_123      OCS_…   3.73     5        3.03    -0.46    -0.88     0.89     1.6 
-##  5 P_14       OCS_…   7.67     5.96    -0.99     2.17     1.21     0.83     3.97
-##  6 P_7        OCS_…   4.33     1.32     2.07     2.22     2.3      2.66     3.36
-##  7 P_93       OCS_…   8.64     7.12     2.12     3.11     0.54     0.36     1.72
-##  8 P_112      OCS_…   4.51     3.28     0.03     0.76     2.3      0.9      1.47
-##  9 P_1        OCS_…  10.0      1.02     2.84     0.67     1.47     2.13     2.01
-## 10 P_51       OCS_…  12.3     -0.85    -0.23     0.95     1.58     1.44     2.47
-## # … with 5 more variables: time_3.5 <dbl>, time_4.0 <dbl>, time_4.5 <dbl>,
-## #   time_5.0 <dbl>, time_5.5 <dbl>
-```
-<br>
-
-
 
 ### Convert possible original dataset to TIDY data
 
@@ -143,7 +116,7 @@ tidy_data <- combined_dataset %>%
 <br>
 
 
-### R codes for figure
+### R codes for the figure
 
 ```r
 w1_replica <- tidy_data %>% 
