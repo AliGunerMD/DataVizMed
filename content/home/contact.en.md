@@ -7,7 +7,7 @@ weight: 100
 
 <br>
 
-If you have any question or request, please contact via the form below or [twitter](https://twitter.com/DataVizMed) account  
+If you have any question or request, please contact via the form below or [twitter](https://twitter.com/DataVizMed) account!    
 <br>
 
 <form method="post" action="https://formspree.io/f/moqrjlze">
