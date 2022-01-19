@@ -10,33 +10,30 @@ tags:
   - mean
   - errorbar
   - JAMA
-editor_options: 
-  chunk_output_type: console
 ---
 <!-- this is for the link button to GitHub-->
-<h1 style="font-family: Arial; font-size: 30px; color: #A02E2F;  text-decoration: underline">
-<a href="https://www.w3schools.com/">GitHub</a>
+<h1 style="font-family: Arial; font-size: 30px; text-decoration: underline">
+<a href="https://github.com/AliGunerMD/DataVizMed/blob/main/content/blog/2022-01-18-week-1/index.en.Rmarkdown/">GitHub</a>
 </h1>
-
-
-
 <br><br>
 
 
 
 
-Title: Impact of Portable Normothermic Blood-Based Machine Perfusion on Outcomes of Liver Transplant  
-The OCS Liver PROTECT Randomized Clinical Trial  
-Journal: **JAMA Surgery**  
-Authors: Markmann JF, Abouljoud MS, Ghobrial RM, et al.  
-Year: 2022  
-PMID: 34985503  
-DOI: 10.1001/jamasurg.2021.6781  
-
-
-<br><br>
 
 First week's figure is from an RCT published in JAMA Surgery. Codes for the replica of Figure-1B will be here.  
+<br>
+### Selected article:
+**Title:** [Impact of Portable Normothermic Blood-Based Machine Perfusion on Outcomes of Liver Transplant  
+The OCS Liver PROTECT Randomized Clinical Trial](https://jamanetwork.com/journals/jamasurgery/fullarticle/2787486)  
+**Journal:** JAMA Surgery  
+**Authors:** Markmann JF, Abouljoud MS, Ghobrial RM, et al.  
+**Year:** 2022  
+**PMID:** 34985503  
+**DOI:** 10.1001/jamasurg.2021.6781  
+
+
+<br><br>
 
 ### the original figure:
 ![Figure-1B](w1_org.jpg)
@@ -48,11 +45,10 @@ First week's figure is from an RCT published in JAMA Surgery. Codes for the repl
 ```r
 library(tidyverse)
 library(scales)
-library(patchwork)
-library(fabricatr)
-library(ggsci)
+library(fabricatr)      # to fabricate fake data
+library(ggsci)          # for using JAMA color pallette (not needed here)
 
-theme_set(theme_light(base_family = "Helvetica Neue"))
+theme_set(theme_light(base_family = "Helvetica Neue")) 
 ```
 <br>
 
@@ -81,7 +77,7 @@ OCS_liver <- fabricate(
 
 # prepare a dataset for group 2:
 set.seed(2022) 
-ICS <- fabricate( # because the n is too small, I prefered manual values for some.
+ICS <- fabricate( # because the n is too small, I preferred manual values for some.
   N = 3,
   group = "ICS",
   time_0 = c(9.2, 9.8, 10.4),
@@ -99,6 +95,33 @@ combined_dataset <-  bind_rows(OCS_liver, ICS) %>%
   select(patient_id, everything(), -ID)
 ```
 <br>
+
+### the view of a sample from the dataset
+
+```r
+combined_dataset %>% 
+        sample_n(10)
+```
+
+```
+## # A tibble: 10 × 14
+##    patient_id group time_0 time_0.5 time_1.0 time_1.5 time_2.0 time_2.5 time_3.0
+##    <chr>      <chr>  <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
+##  1 P_55       OCS_…   8.3      4.91     4.17    -0.11     0.96     3.25    -0.36
+##  2 P_75       OCS_…  11.2      5.9      2.33     3.7      0.62     1.85     2.55
+##  3 P_6        OCS_…  -1.01     1.65    -0.32     0.96     0.28     3.37    -0.78
+##  4 P_123      OCS_…   3.73     5        3.03    -0.46    -0.88     0.89     1.6 
+##  5 P_14       OCS_…   7.67     5.96    -0.99     2.17     1.21     0.83     3.97
+##  6 P_7        OCS_…   4.33     1.32     2.07     2.22     2.3      2.66     3.36
+##  7 P_93       OCS_…   8.64     7.12     2.12     3.11     0.54     0.36     1.72
+##  8 P_112      OCS_…   4.51     3.28     0.03     0.76     2.3      0.9      1.47
+##  9 P_1        OCS_…  10.0      1.02     2.84     0.67     1.47     2.13     2.01
+## 10 P_51       OCS_…  12.3     -0.85    -0.23     0.95     1.58     1.44     2.47
+## # … with 5 more variables: time_3.5 <dbl>, time_4.0 <dbl>, time_4.5 <dbl>,
+## #   time_5.0 <dbl>, time_5.5 <dbl>
+```
+<br>
+
 
 
 ### Convert possible original dataset to TIDY data
@@ -126,11 +149,11 @@ tidy_data <- combined_dataset %>%
 w1_replica <- tidy_data %>% 
   ggplot(aes(time, mean, color = group)) +
   geom_errorbar(data = . %>% filter(sd != 0),
-                aes(ymin = mean - sd, ymax = mean + sd), width = .4, size = .4, show.legend = F) + # single errorbar was ok, but colors of edges and lines are different. Therefore, I used an additional geom_linerange
-  geom_linerange(aes(ymin = mean - sd, ymax = mean + sd), color = "black", size = .4) +
-  geom_point(size = 4) +
+                aes(ymin = mean - sd, ymax = mean + sd), width = .3, size = .3, show.legend = F) + # single errorbar was ok, but colors of edges and lines are different. Therefore, I used an additional geom_linerange
+  geom_linerange(aes(ymin = mean - sd, ymax = mean + sd), color = "black", size = .3) +
+  geom_point(size = 3) +
   geom_line(aes(group = group), size = 1.2, show.legend = F) +
-  # scale_color_jama(labels =c("ICS" = "Turned down","OCS_liver" = "Transplanted")) +
+  # scale_color_jama(labels =c("ICS" = "Turned down","OCS_liver" = "Transplanted")) + # JAMA has its own color palette, but I prefered using manual values.
   scale_color_manual(values = c( "ICS" = "#244551","OCS_liver" = "#F28118"), labels =c("ICS" = "Turned down","OCS_liver" = "Transplanted")) +
   scale_y_continuous(breaks = seq(0,14,2), labels = number_format(accuracy = 1)) +
   labs(x = "Time on OCS Liver, h",
@@ -144,7 +167,7 @@ w1_replica <- tidy_data %>%
         axis.line = element_line(colour = "black"),
         axis.ticks.length = unit(.20, "cm"),
         axis.ticks = element_line(color = "black", size = .5),
-        axis.text = element_text(color = "black", size = 16),
+        axis.text = element_text(color = "black", size = 10),
         legend.title = element_blank(),
         legend.background = element_rect(colour = "black", size = .4),
         legend.position = c(.75, .75),
@@ -154,16 +177,16 @@ w1_replica <- tidy_data %>%
         legend.key.height = unit(.8, "cm"),
         plot.margin = unit(c(1,1,1,1), "cm"),
         plot.title = element_text(hjust = -0.1, vjust = 2),
-        axis.title.x = element_text(size = 16, vjust = -1),
-        axis.title.y = element_text(size = 16, vjust = 1)) +
+        axis.title.x = element_text(size = 10, vjust = -1),
+        axis.title.y = element_text(size = 10, vjust = 1)) +
   guides(colour = guide_legend(override.aes = list(shape = 16, size = 5))) +
   coord_cartesian(xlim = c(0.5, n_distinct(tidy_data$time)), ylim = c(-0.5,14), expand=0, clip = "off")  # using n_distinct is better than 12 for reproducibility.
 
 ggsave(w1_replica,
        filename = "w1_replica.jpg",
        dpi = 300,
-       width = 8,
-       height = 6)
+       width = 6,
+       height = 4)
 ```
 <br>
 
@@ -174,9 +197,12 @@ ggsave(w1_replica,
 
 ### Some personal recommendations:
 **Major:**  
-1. I would not prefer using negative SD values.   
+1. I would not prefer using negative SD (lower threshold of 1sd of mean) values.   
 1. There is an overlap in the errorbars on time-0. I would prefer using position_dodge.  
-1. visualizing a distribution far a group n = 3 may not be a good idea.   
+1. visualizing a distribution for a small-sized group (n = 3) may not be a good idea.   
 
 **Minor:**  
 1. I would not prefer using 1.0, 2.0, 3.0, etc. 1, 2, 3, is ok.  
+1. The management of tags is ok with [patchwork](https://patchwork.data-imaginist.com/articles/guides/annotation.html) package, and should be done at the end.  
+1. I m not sure about the font. an update may be required.  
+<br>
