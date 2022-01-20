@@ -145,17 +145,19 @@ w1_replica <- tidy_data %>%
         axis.title.y = element_text(size = 10, vjust = 1),
         legend.title = element_blank(),
         legend.background = element_rect(colour = "black", size = .2),
-        legend.position = c(.75, .75),
+        legend.position = c(.80, .75),
         legend.text = element_text(size = 9),
         legend.text.align = .5,
         legend.spacing.y = unit(0, "cm"),
+        legend.spacing.x = unit(0, "cm"),
         legend.key.height = unit(.4, "cm"),
         plot.margin = unit(c(1,1,1,1), "cm"),
         plot.title = element_text(hjust = -0.1, vjust = 2)) +
-  guides(colour = guide_legend(override.aes = list(shape = 16, size = 4))) +
-  coord_cartesian(xlim = c(0.5, n_distinct(tidy_data$time)), ylim = c(-0.5, 14), expand=0, clip = "off")  # using n_distinct is better than 12 for reproducibility.
+  guides(colour = guide_legend(override.aes = list(shape = 16, size = 3))) +
+  coord_cartesian(xlim = c(0.5, n_distinct(tidy_data$time)), ylim = c(-0.5, 14), expand = 0, clip = "off")  # using n_distinct is better than 12 for reproducibility.
 
 ggsave(w1_replica,
+       # filename = "content/blog/2022-01-18-week-1/w1_replica.jpg",
        filename = "w1_replica.jpg",
        dpi = 300,
        width = 5,
