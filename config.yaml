@@ -23,7 +23,7 @@ params:
     localTime: yes
     numberOfProjectsToShow: 3
     showAllPosts: yes
-    showLatest: no
+    showLatest: yes
     timeFormat: en-US
     timeZone: America/Los_Angeles
   logo: /img/logo_small.png  # in static/img folder: for main page
