@@ -1,6 +1,7 @@
 baseURL: https://datavizmed.com/
 theme: hugo-chairome
 DefaultContentLanguage: en
+googleAnalytics: G-BG9BYKTRW0
 params:
   blog:
     citation: yes
