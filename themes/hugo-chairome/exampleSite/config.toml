@@ -47,9 +47,9 @@ DefaultContentLanguage           = "en"                    # Default language fo
     # https://www.joelnitta.com/posts/2021-11-24_using-giscus/
     [params.giscus]
         repo = "AliGunerMD/DataVizMed" # Entering repo will enable giscus
-        repo-id = "enter-repo-id"
-        category = "Comments"
-        category-id = "enter-category-id"
+        repo-id = "R_kgDOGlSuTQ"
+        category = "General"
+        category-id = "DIC_kwDOGlSuTc4CAzrP"
         mapping = "pathname"
         reactions-enabled = "1"
         emit-metadata = "0"
