@@ -16,7 +16,7 @@ params:
     lang: en
     mapping: pathname
     reactions-enabled: '1'
-    repo-id: enter-repo-id
+    repo-id: DataVizMed
     theme: light
   home:
     introHeight: fullheight
