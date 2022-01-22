@@ -46,14 +46,14 @@ DefaultContentLanguage           = "en"                    # Default language fo
     # needed to populate the below information.
     # https://www.joelnitta.com/posts/2021-11-24_using-giscus/
     [params.giscus]
-        # repo = "github-user/github-repo" # Entering repo will enable giscus
+        repo = "AliGunerMD/DataVizMed" # Entering repo will enable giscus
         repo-id = "enter-repo-id"
         category = "Comments"
         category-id = "enter-category-id"
         mapping = "pathname"
         reactions-enabled = "1"
         emit-metadata = "0"
-        theme = "light"
+        theme = "css/giscus.css"
         lang = "en"
 
     # Social icons appear in introduction and contact section. Add as many more as you like.
