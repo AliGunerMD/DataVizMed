@@ -10,13 +10,13 @@ params:
   fadeInIndex: no
   favicon: /img/fav.ico
   giscus:
-    category: General
-    category-id: DIC_kwDOGlSuTc4CAzrP
+    category: Comments
+    category-id: enter-category-id
     emit-metadata: '0'
     lang: en
     mapping: pathname
     reactions-enabled: '1'
-    repo-id: R_kgDOGlSuTQ
+    repo-id: enter-repo-id
     theme: light
   home:
     introHeight: fullheight
