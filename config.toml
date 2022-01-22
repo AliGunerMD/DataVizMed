@@ -1,8 +1,8 @@
-baseURL                          = "http://example.com/"   # Your domain name. Must end with "/"
+baseURL                          = "http://datavizmed.com/"   # Your domain name. Must end with "/"
 theme                            = "hugo-chairome"
 DefaultContentLanguage           = "en"                    # Default language for multilingual sites
-# disqusshortname                 = ""                     # https://gohugo.io/content-management/comments
-# googleAnalytics                 = ""                     # https://gohugo.io/templates/internal/#google-analytics
+disqusshortname                 = "datavizmed-com"                     # https://gohugo.io/content-management/comments
+googleAnalytics                 = "G-9SH84FC4VR"                     # https://gohugo.io/templates/internal/#google-analytics
 
 
 [params]
@@ -15,7 +15,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
     fadeIn                       = true                    # Turn on/off the fade-in effect
     fadeInIndex                  = false                   # Turn on/off the fade-in effect on the index page even if fade-in was otherwise turned off
     dateFormat                   = "Jan 2, 2006"
-    email                        = "youremail@email.com"   # E-mail address for contact section
+    email                        = "datavizmed@email.com"   # E-mail address for contact section
     # customCSS                  = ["foo.css"]             # Include custom css files placed under assets/
     # customJS                   = ["foo.js"]              # Include custom JavaScript files placed under assets/
 
@@ -120,26 +120,26 @@ DefaultContentLanguage           = "en"                    # Default language fo
         languageName     = "English"
         languageCode     = "en-us"
         weight           = 0
-        title            = "Introduction"
+        title            = "DataVizMed"
         [languages.en.params]
-            description  = "Website Description"   # Max 160 characters show in search results
-            # footerText   = ""                      # Text to override default footer text (markdown allowed)
+            description  = "Data Visualization in Medicine"   # Max 160 characters show in search results
+            footerText   = ""                      # Text to override default footer text (markdown allowed)
 
-    [languages.es]
-        languageName     = "Español"
-        languageCode     = "es"
-        weight           = 1
-        title            = "Introducción"
-        [languages.es.params]
-            description  = "Descripcion del sitio web"
-            # footerText   = ""
+#    [languages.es]
+#        languageName     = "Español"
+#        languageCode     = "es"
+#        weight           = 1
+#        title            = "Introducción"
+#        [languages.es.params]
+#            description  = "Descripcion del sitio web"
+#            # footerText   = ""
 
-    [languages.de]
-        languageName     = "Deutsch"
-        languageCode     = "de"
-        weight           = 2
-        title            = "Vorstellung"
-        [languages.de.params]
-            dateFormat   = "2. January 2006"
-            description  = "Beschreibung der Webseite"
-            # footerText   = ""
+#    [languages.de]
+#        languageName     = "Deutsch"
+ #       languageCode     = "de"
+#        weight           = 2
+ #       title            = "Vorstellung"
+#        [languages.de.params]
+ #           dateFormat   = "2. January 2006"
+  #          description  = "Beschreibung der Webseite"
+ #           # footerText   = ""
