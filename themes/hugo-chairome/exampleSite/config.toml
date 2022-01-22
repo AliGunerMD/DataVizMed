@@ -1,4 +1,4 @@
-baseURL                          = "http://datavizmed.com/"   # Your domain name. Must end with "/"
+baseURL                          = "http://example.com/"   # Your domain name. Must end with "/"
 theme                            = "hugo-chairome"
 DefaultContentLanguage           = "en"                    # Default language for multilingual sites
 # disqusshortname                 = ""                     # https://gohugo.io/content-management/comments
@@ -48,8 +48,8 @@ DefaultContentLanguage           = "en"                    # Default language fo
     [params.giscus]
         repo = "AliGunerMD/DataVizMed" # Entering repo will enable giscus
         repo-id = "R_kgDOGlSuTQ"
-        category = "General"
-        category-id = "DIC_kwDOGlSuTc4CAzrP"
+        category = "Comments"
+        category-id = "DIC_kwDOGlSuTc4CAzu4"
         mapping = "pathname"
         reactions-enabled = "1"
         emit-metadata = "0"
