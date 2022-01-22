@@ -9,15 +9,15 @@ params:
   fadeIn: yes
   fadeInIndex: no
   favicon: /img/fav.ico
-  giscus:
-    category: Comments
-    category-id: DIC_kwDOGlSuTc4CAzu4
-    emit-metadata: '0'
-    lang: en
-    mapping: pathname
-    reactions-enabled: '1'
-    repo-id: R_kgDOGlSuTQ
-    theme: light
+  # giscus:
+  #   category: Comments
+  #   category-id: DIC_kwDOGlSuTc4CAzu4
+  #   emit-metadata: '0'
+  #   lang: en
+  #   mapping: pathname
+  #   reactions-enabled: '1'
+  #   repo-id: R_kgDOGlSuTQ
+  #   theme: light
   home:
     introHeight: fullheight
     localTime: yes
