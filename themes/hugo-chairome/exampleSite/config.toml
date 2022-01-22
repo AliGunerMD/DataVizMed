@@ -1,7 +1,7 @@
 baseURL                          = "http://example.com/"   # Your domain name. Must end with "/"
 theme                            = "hugo-chairome"
 DefaultContentLanguage           = "en"                    # Default language for multilingual sites
-# disqusshortname                 = "datavizmed-com"                     # https://gohugo.io/content-management/comments
+disqusshortname                 = "datavizmed-com"                     # https://gohugo.io/content-management/comments
 googleAnalytics                 = "G-9SH84FC4VR"                     # https://gohugo.io/templates/internal/#google-analytics
 
 
