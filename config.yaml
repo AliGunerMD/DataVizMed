@@ -26,7 +26,7 @@ params:
     showAllPosts: yes
     showLatest: yes
     timeFormat: en-US
-    timeZone: America/Los_Angeles
+ #   timeZone: America/Los_Angeles
   logo: /img/logo_small.png  # in static/img folder: for main page
   logo_size: 15%
   postStyle: hex
