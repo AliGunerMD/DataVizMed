@@ -7,12 +7,12 @@ DefaultContentLanguage           = "en"                    # Default language fo
 [params]
     themeStyle                   = "light"                 # Choose "light" or "dark"
     favicon                      = "/img/fav.ico"          # Path to favicon file
-    logo                         = "/img/logo_small.png"   # logo hero
+    logo                         = "/img/logo_small_big.png"   # logo hero
     logo_size                    = "15%"                   # logo size
     postStyle                    = "hex"                # Blog list/grid, either list, square, circle, or hex
     showRSSButton                = false                   # Show rss button in navigation
     fadeIn                       = true                    # Turn on/off the fade-in effect
-    fadeInIndex                  = true                   # Turn on/off the fade-in effect on the index page even if fade-in was otherwise turned off
+    fadeInIndex                  = false                   # Turn on/off the fade-in effect on the index page even if fade-in was otherwise turned off
     dateFormat                   = "Jan 2, 2006"
     email                        = "datavizmed@gmail.com"   # E-mail address for contact section
     # customCSS                  = ["foo.css"]             # Include custom css files placed under assets/
@@ -36,7 +36,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
         facebook                 = true
         googlePlus               = true
         pinterest                = true
-        instagram                = true
+        instagram                = true # not available
     [params.blog]
         citation = true
         
