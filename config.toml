@@ -1,6 +1,6 @@
-baseURL                          = "https://datavizmed.com/"   # Your domain name. Must end with "/"
-googleAnalytics                  = "G-BG9BYKTRW0"                     # https://gohugo.io/templates/internal/#google-analytics
-disqusshortname                  = "datavizmed-com"                   # https://gohugo.io/content-management/comments
+baseURL                          = "https://datavizmed.com/" # Your domain name. Must end with "/"
+googleAnalytics                  = "G-BG9BYKTRW0"             # https://gohugo.io/templates/internal/#google-analytics
+disqusshortname                  = "datavizmed-com"           # https://gohugo.io/content-management/comments
 theme                            = "hugo-chairome"
 DefaultContentLanguage           = "en"                    # Default language for multilingual sites
 
