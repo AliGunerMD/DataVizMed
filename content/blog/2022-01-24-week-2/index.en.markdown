@@ -1,0 +1,480 @@
+---
+title: Week-2
+author: Ali Guner
+image: w2_replica.jpg
+date: 2022-01-24T16:58:43+0300
+slug: []
+categories:
+  - figure
+tags:
+  - barplot
+  - JAMA
+  - custom function
+  - patchwork
+  - cowplot
+draft: yes
+---
+
+<!-- this is for the link button to GitHub-->
+<h1 style="font-family: Arial; font-size: 30px; text-decoration: underline">
+<a href="https://github.com/AliGunerMD/DataVizMed/blob/main/content/blog/2022-01-24-week-2/index.en.Rmarkdown/">GitHub</a>
+</h1>
+<br><br>
+
+
+
+
+Second week's figure is from a large cohort study published in JAMA.   
+Codes for the replica of Figure-2 will be here.  
+<br>
+
+### Selected article:
+**Title:** [Assessment of Clinical Criteria for Sepsis  
+For the Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3)](https://jamanetwork.com/journals/jama/fullarticle/2492875)   
+**Journal:** JAMA    
+**Authors:** Seymour CW, Liu VX, Iwashyna TJ et al.  
+**Year:** 2016  
+**PMID:** [27218643](https://pubmed.ncbi.nlm.nih.gov/26903335/)  
+**DOI:** 10.1001/jama.2016.0288   
+
+
+<br><br>
+
+
+### The original figure
+![Figure-2](w2_org.jpg)
+
+
+
+
+### Import libraries
+
+```r
+library(tidyverse)
+library(scales)
+library(fabricatr)      # to fabricate fake data
+library(patchwork)      # to combine plots
+library(cowplot)        # to combine plots
+library(ggsci)          # for using JAMA color palette (not needed here)
+
+theme_set(theme_light(base_family = "Open Sans"))
+```
+<br>
+
+
+### Prepare fabricated data
+
+```r
+set.seed(2022)
+ICU <- fabricate(
+  N = 7932,
+  group = "ICU", 
+  sirs = draw_categorical(N = N, 
+                          prob = c(.03, .13, .31, .27, .17),
+                          category_labels = as.numeric(c("0", "1", "2", "3", "4"))),
+  sofa = draw_categorical(N = N, 
+                          prob = c(.035, .055, .075, .09, .12, .11, .10, .08, .07, .06, .05, .04, .03, .022, .018, .008, .021),
+                          category_labels = as.numeric(c("0", "1", "2", "3", "4","5", "6", "7", "8", "9","10", "11", "12", "13", "14", "15", "16"))),
+  lods = draw_categorical(N = N, 
+                          prob = c(.035, .075, .050, .09, .12, .08, .10, .11, .07, .06, .03, .03, .015, .012, .055),
+                          category_labels = as.numeric(c("0", "1", "2", "3", "4","5", "6", "7", "8", "9","10", "11", "12", "13", "14"))),
+  qsofa = draw_categorical(N = N, 
+                          prob = c(.02, .15, .40, .43),
+                          category_labels = as.numeric(c("0", "1", "2", "3")))) %>% 
+  as_tibble()
+
+
+set.seed(2022)
+non_ICU <- fabricate(
+  N = 66522,
+  group = "non_ICU", 
+  sirs = draw_categorical(N = N, 
+                          prob = c(.31, .34, .23, .10, .03),
+                          category_labels = as.numeric(c("0", "1", "2", "3", "4"))),
+  sofa = draw_categorical(N = N, 
+                          prob = c(.42, .24, .16, .08, .05, .03, .02, .018, .018, .005, .003, .002, .001, .001, .0001, .0001, .0001),
+                          category_labels = as.numeric(c("0", "1", "2", "3", "4","5", "6", "7", "8", "9","10", "11", "12", "13", "14", "15", "16"))),
+  lods = draw_categorical(N = N, 
+                          prob = c(.45, .23, .07, .13, .07, .03, .02, .015, .010, .008, .006, .005, .004, .002, .004),
+                          category_labels = as.numeric(c("0", "1", "2", "3", "4","5", "6", "7", "8", "9","10", "11", "12", "13", "14"))),
+  qsofa = draw_categorical(N = N, 
+                          prob = c(.48, .38, .14, .04),
+                          category_labels = as.numeric(c("0", "1", "2", "3")))) %>% 
+  as_tibble()
+
+
+
+combined_dataset <-  bind_rows(ICU, non_ICU) %>% 
+  mutate (patient_id = paste0("P_", row_number())) %>% 
+  select(patient_id, everything(), -ID)
+```
+<br>
+
+
+
+**Possible strategy:** I personally prefer using one plot with facets, 
+but using same text in every y-axis in the original figure may be difficult (although it does not make sense.)  
+
+Therefore, I chose making 8 different plots, combined them 4 + 4 with individual titles, then, combined them into one final plot.   
+There are two ways to do this.  
+1. using one custom function to make 8 plots
+1. making 8 different plots with separate codes.
+
+### R codes for the figure
+**a. eight plots with one single custom function (recommended)**
+
+```r
+score_plot <- function(study_group, score_name){                   # Because there is only one dataset, I did not add .df as an argument.
+  
+label <- case_when(score_name == "sirs" ~ "SIRS Criteria",  # labels are to use in x-axis and subtitles.
+                   score_name == "sofa" ~ "SOFA Score",
+                   score_name == "lods" ~ "LODS Score",
+                   score_name == "qsofa" ~ "qSOFA Score")
+
+max_score <- max(combined_dataset[score_name])              # to use in x-axis scaling because all scales are different.
+  
+plot <- combined_dataset %>% 
+  filter(group == study_group) %>% 
+  group_by(.data[[score_name]]) %>% 
+  summarise (n=n()) %>% 
+  mutate(perc = 100 * round(n/sum(n), 3)) %>%
+  ggplot(aes(.data[[score_name]], perc)) +
+  geom_col(fill = "#6A8994", color = "black", width = .4) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 50)) +
+  scale_x_continuous(breaks = seq(0, max_score, 1)) +
+  theme(axis.ticks.x = element_blank(),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.ticks.length=unit(.20, "cm"),
+        axis.text = element_text(size = 10, color = "black", family = "Open Sans SemiBold"),
+        axis.title = element_text(family = "Open Sans SemiBold"),
+        axis.title.y = element_text(vjust = 1.5),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "lightgray", size = .5),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black"),
+        plot.subtitle = element_text(vjust = 3, hjust = -0.03, family = "Open Sans SemiBold")) +
+   labs(x = label,
+        y = "Encounters, %\n", 
+        subtitle = paste0(label, "\n")) 
+
+
+plot_with_limits <-                                       # sirs and qsofa plots have empty cols area on both side.
+  if(score_name %in% c("sirs", "qsofa")) {
+    plot + 
+      expand_limits(x=c(-1, max_score+1))
+  }
+else {
+  plot
+}
+if(study_group == "ICU"){                                 # I only used subtitle for left-side plots. 
+  plot_with_limits
+}
+else{
+  plot_with_limits +
+    labs(subtitle = "\n",
+         y = "\n\n\nEncounters, %\n")                     # not the best way but I sometimes use to increase the space between plots.
+}}
+
+
+# DRAW plots by using custom function (not mandatory, we may go with {patchwork} step)
+sirs_1 <- score_plot("ICU", "sirs")
+sofa_1 <- score_plot("ICU", "sofa")  
+lods_1 <- score_plot("ICU", "lods") 
+qsofa_1 <- score_plot("ICU", "qsofa") 
+sirs_2 <- score_plot("non_ICU", "sirs")  
+sofa_2 <- score_plot("non_ICU", "sofa")  
+lods_2 <- score_plot("non_ICU", "lods") 
+qsofa_2 <- score_plot("non_ICU", "qsofa")  
+
+
+p_left <- sirs_1 / sofa_1 / lods_1 / qsofa_1 +           # {patchwork} package is good enough to combine plots.  
+  plot_annotation(title = paste0("ICU encounters (n=", nrow(ICU),")\n"), tag_levels = "A") &
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 11),
+        plot.tag.position = c(0, 1),
+        plot.tag = element_text(size = 12, hjust = 0, vjust = 1, face = "bold"))
+
+p_right <- sirs_2 / sofa_2 / lods_2 / qsofa_2 +
+  plot_annotation(title = paste0("Non-ICU encounters (n=", nrow(non_ICU),")\n"), tag_levels = NULL) &
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 11))
+
+
+final_plot <- cowplot::plot_grid (p_left, p_right)        # {cowplot} may work better in some complex situations.
+
+# final_plot + 
+#   geom_rect(aes(xmin = 0.011, xmax = 0.031, ymin = 0.225, ymax = .245), color = "#787878", alpha = 0) # can be used to add a square around tags.
+
+ggsave(final_plot,
+       filename = "w2_replica.jpg",
+       dpi = 300,
+       width = 12,
+       height = 15)
+```
+<br>
+
+
+### Final replica
+![replica Figure-2](w2_replica.jpg)
+
+
+
+**b. eight plots with separate codes (not recommended)**
+
+```r
+sirs_1 <- combined_dataset %>% 
+  filter(group == "ICU") %>% 
+  group_by(sirs) %>% 
+  summarise (n=n()) %>% 
+  mutate(perc = 100 * round(n/sum(n),3)) %>% 
+  ggplot(aes(sirs, perc)) +
+  geom_col(fill = "#6A8994", color="black", width = .4) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 50)) +
+  labs(x = "SIRS Criteria",
+       y = "Encounters, %", 
+       subtitle = "SIRS criteria\n") +
+  theme(axis.ticks.x = element_blank(),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.ticks.length=unit(.20, "cm"),
+        axis.text = element_text(size = 12, color = "black"),
+        # axis.title = element_text(size = 12, color = "black"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "lightgray", size = .5),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black"),
+        plot.subtitle = element_text(hjust = -0.04)) +
+  expand_limits(x=c(-1, 5)) +
+  scale_x_continuous(breaks = seq(0, 4, 1)) 
+
+
+sirs_2 <- combined_dataset %>% 
+  filter(group == "non_ICU") %>% 
+  group_by(sirs) %>% 
+  summarise (n=n()) %>% 
+  mutate(perc = 100 * round(n/sum(n),3)) %>% 
+  ggplot(aes(sirs, perc)) +
+  geom_col(fill = "#6A8994", color="black", width = .4) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 50)) +
+  labs(x = "SIRS Criteria",
+       y = "\n\n\nEncounters, %") +
+  theme(axis.ticks.x = element_blank(),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.ticks.length=unit(.20, "cm"),
+        axis.text = element_text(size = 12, color = "black"),
+        # axis.title = element_text(size = 12, color = "black"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "lightgray", size = .5),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black")) +
+  expand_limits(x=c(-1, 5)) +
+  scale_x_continuous(breaks = seq(0, 4, 1))
+
+
+sofa_1 <- combined_dataset %>% 
+  filter(group == "ICU") %>% 
+  group_by(sofa) %>% 
+  summarise (n=n()) %>% 
+  mutate(perc = 100 * round(n/sum(n),3)) %>% 
+  ggplot(aes(sofa, perc)) +
+  geom_col(fill = "#6A8994", color="black", width = .5) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 50)) +
+  labs(x = "SOFA Score",
+       y = "Encounters, %", 
+       subtitle = "SOFA score\n") +
+  theme(axis.ticks.x = element_blank(),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.ticks.length=unit(.20, "cm"),
+        axis.text = element_text(size = 12, color = "black"),
+        # axis.title = element_text(size = 12, color = "black"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "lightgray", size = .5),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black"),
+        plot.subtitle = element_text(hjust = -0.04)) +
+  scale_x_continuous(breaks = seq(0, 16, 1))
+
+
+sofa_2 <- combined_dataset %>% 
+  filter(group == "non_ICU") %>% 
+ group_by(sofa) %>% 
+  summarise (n=n()) %>% 
+  mutate(perc = 100 * round(n/sum(n),3)) %>% 
+  ggplot(aes(sofa, perc)) +
+  geom_col(fill = "#6A8994", color="black", width = .5) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 50)) +
+  labs(x = "SOFA Score",
+       y = "\n\n\nEncounters, %") +
+  theme(axis.ticks.x = element_blank(),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.ticks.length=unit(.20, "cm"),
+        axis.text = element_text(size = 12, color = "black"),
+        # axis.title = element_text(size = 12, color = "black"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "lightgray", size = .5),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black")) +
+  scale_x_continuous(breaks = seq(0, 16, 1)) +
+  expand_limits(x=c(0, 16))
+
+
+lods_1 <- combined_dataset %>% 
+  filter(group == "ICU") %>% 
+  group_by(lods) %>% 
+  summarise (n=n()) %>% 
+  mutate(perc = 100 * round(n/sum(n),3)) %>% 
+  ggplot(aes(lods, perc)) +
+  geom_col(fill = "#6A8994", color="black", width = .5) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 50)) +
+  labs(x = "LODS Score",
+       y = "Encounters, %", 
+       subtitle = "LODS score\n") +
+  theme(axis.ticks.x = element_blank(),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.ticks.length=unit(.20, "cm"),
+        axis.text = element_text(size = 12, color = "black"),
+        # axis.title = element_text(size = 12, color = "black"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "lightgray", size = .5),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black"),
+        plot.subtitle = element_text(hjust = -0.04)) +
+  scale_x_continuous(breaks = seq(0, 14, 1))
+
+
+lods_2 <- combined_dataset %>% 
+  filter(group == "non_ICU") %>% 
+  group_by(lods) %>% 
+  summarise (n=n()) %>% 
+  mutate(perc = 100 * round(n/sum(n),3)) %>% 
+  ggplot(aes(lods, perc)) +
+  geom_col(fill = "#6A8994", color="black", width = .5) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 50)) +
+  labs(x = "LODS Score",
+       y = "\n\n\nEncounters, %") +
+  theme(axis.ticks.x = element_blank(),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.ticks.length=unit(.20, "cm"),
+        axis.text = element_text(size = 12, color = "black"),
+        # axis.title = element_text(size = 12, color = "black"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "lightgray", size = .5),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black")) +
+  scale_x_continuous(breaks = seq(0, 14, 1))
+
+
+qsofa_1 <- combined_dataset %>% 
+  filter(group == "ICU") %>% 
+  group_by(qsofa) %>% 
+  summarise (n=n()) %>% 
+  mutate(perc = 100 * round(n/sum(n),3)) %>% 
+  ggplot(aes(qsofa, perc)) +
+  geom_col(fill = "#6A8994", color="black", width = .4) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 50)) +
+  labs(x = "qSOFA Score",
+       y = "Encounters, %", 
+       subtitle = "qSOFA score\n") +
+  theme(axis.ticks.x = element_blank(),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.ticks.length=unit(.20, "cm"),
+        axis.text = element_text(size = 12, color = "black"),
+        # axis.title = element_text(size = 12, color = "black"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "lightgray", size = .5),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black"),
+        plot.subtitle = element_text(hjust = -0.04)) +
+  expand_limits(x=c(-1, 4)) +
+  scale_x_continuous(breaks = seq(0, 3, 1))
+
+
+qsofa_2 <- combined_dataset %>% 
+  filter(group == "non_ICU") %>% 
+  group_by(qsofa) %>% 
+  summarise (n=n()) %>% 
+  mutate(perc = 100 * round(n/sum(n),3)) %>% 
+  ggplot(aes(qsofa, perc)) +
+  geom_col(fill = "#6A8994", color="black", width = .4) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 50)) +
+  labs(x = "qSOFA Score",
+       y = "\n\n\nEncounters, %") +
+  theme(axis.ticks.x = element_blank(),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.ticks.length=unit(.20, "cm"),
+        axis.text = element_text(size = 12, color = "black"),
+        # axis.title = element_text(size = 12, color = "black"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "lightgray", size = .5),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black")) +
+  expand_limits(x=c(-1, 4)) +
+  scale_x_continuous(breaks = seq(0, 3, 1))
+
+
+# then eight plots can be combined with the similar approach.
+```
+<br>
+
+
+**c. one plot with facets (good for personal use)**
+
+```r
+group_names <- as_labeller(c(
+  "ICU" = " ",
+  "non_ICU" = " ",
+  "sirs" = "SIRS Criteria",
+  "sofa" ="SOFA Score",
+  "lods" = "LODS Score",  
+  "qsofa" = "qSOFA Score"
+))
+
+
+faceted_plot <- combined_dataset %>% 
+  pivot_longer(cols = sirs:qsofa,
+               names_to = "score_name",
+               values_to = "value") %>% 
+  group_by(group, score_name = as_factor(score_name), value) %>% 
+  summarise (n=n()) %>% 
+  mutate(perc = 100 * round(n/sum(n),3),
+         score_name = fct_relevel(score_name, c("sirs", "sofa", "lods", "qsofa"))) %>% 
+  ggplot(aes(value, perc)) +
+  geom_col(fill = "#6A8994", position = position_dodge2(preserve = "single")) +
+  facet_wrap(score_name ~ group, scales = "free", ncol = 2, strip.position = "bottom", labeller = group_names) +
+  scale_y_continuous(limits = c(0,50), expand = c(0, 0)) +
+  scale_x_continuous(breaks = seq(0,16,1)) +
+  theme_minimal() +
+  labs(x = "",
+       y = "Encounters, %\n") + 
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_line(color = "lightgray", size = .5),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "black"),
+        strip.placement	= "outside",
+        plot.margin=unit(c(2,0.2,0.2,0.2),"cm"),
+        plot.subtitle = element_text(hjust = .5, face = "bold")) 
+# then, titles and subtitles can be added.
+```
+<br>
+
+### Some personal recommendations:   
+None for now.  
+<br><br>
+
