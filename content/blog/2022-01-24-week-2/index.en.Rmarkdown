@@ -12,7 +12,6 @@ tags:
   - custom function
   - patchwork
   - cowplot
-draft: yes
 ---
 
 <!-- this is for the link button to GitHub-->
