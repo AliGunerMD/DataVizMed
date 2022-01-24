@@ -49,7 +49,7 @@ library(scales)
 library(fabricatr)      # to fabricate fake data
 library(ggsci)          # for using JAMA color pallette (not needed here)
 
-theme_set(theme_light(base_family = "Helvetica Neue")) 
+theme_set(theme_light(base_family = "Open Sans")) # Updated on 2022-01-24 ("Helvetica Neue" was converted to "Open Sans")
 ```
 <br>
 
@@ -181,6 +181,6 @@ ggsave(w1_replica,
 
 **Notes:**
 1. The management of tags is ok with [patchwork](https://patchwork.data-imaginist.com/articles/guides/annotation.html) package, and should be done at the end.  
-1. I m not sure about the font. an update may be required.  
+1. I m not sure about the font. an update may be required.  (updated to "Open Sans")
 1. figure ratio in the blog is slightly different than the rstudio version.
-<br>
+<br><br>
