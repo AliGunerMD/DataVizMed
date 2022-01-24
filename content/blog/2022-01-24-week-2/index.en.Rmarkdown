@@ -206,7 +206,7 @@ final_plot <- cowplot::plot_grid (p_left, p_right)        # {cowplot} may work b
 
 ggsave(final_plot,
        filename = "w2_replica.jpg",
-       dpi = 300,
+       dpi = 150,
        width = 12,
        height = 15)
 
