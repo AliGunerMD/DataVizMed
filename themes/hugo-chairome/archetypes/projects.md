@@ -7,5 +7,5 @@ resources:
     - src: plant.jpg
       params:
           weight: -100 # Optional weighting for a specific image in this project folder
-draft: true
+draft: false
 ---
