@@ -3,7 +3,7 @@ resources:
 - params:
     weight: -100
   src: plant.jpg
-title: Journal Club
+title: "Journal Club"
 weight: 2
 ---
 

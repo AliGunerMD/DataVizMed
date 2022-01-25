@@ -1,5 +1,5 @@
 ---
-title: Student-driven studies
+title: "Student-driven studies"
 weight: 4
 ---
 

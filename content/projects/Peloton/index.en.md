@@ -3,7 +3,7 @@ resources:
 - params:
     weight: -100
   # src: plant.jpg
-title: Peloton
+title: "Peloton"
 weight: 3
 ---
 
