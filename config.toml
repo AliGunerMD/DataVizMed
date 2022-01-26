@@ -107,6 +107,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
 # We only use tag as a taxonomies
 # You can add more by yourself
 [taxonomies]
+  category = "categories"
   tag = "tags"
   series = "series"
 
@@ -124,7 +125,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
     lineNumbersInTable = true
     noClasses = true
     # For styles, see https://xyproto.github.io/splash/docs/longer/all.html
-    style = "friendly"
+    style = "tango"  # was friendly
     tabWidth = 4
 
 [languages]
