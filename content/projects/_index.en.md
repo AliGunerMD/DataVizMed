@@ -1,5 +1,5 @@
 ---
-title: Projects
+title: Other projects
 type: projects
 weight: 20
 ---

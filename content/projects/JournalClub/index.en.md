@@ -5,6 +5,9 @@ resources:
   src: plant.jpg
 title: "Journal Club"
 weight: 2
+output:
+  html_document:
+    keep_md: yes
 ---
 
 ## To improve publication experience 💪

@@ -1,7 +1,7 @@
 ---
 title: 
 type: home
-weight: 10
+weight: 04
 ---
 
 <h1 style="color:#A02E2F;">DataVizMed</h1>  

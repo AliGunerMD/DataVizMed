@@ -15,15 +15,15 @@ DefaultContentLanguage           = "en"                    # Default language fo
     fadeInIndex                  = false                   # Turn on/off the fade-in effect on the index page even if fade-in was otherwise turned off
     dateFormat                   = "Jan 2, 2006"
     email                        = "datavizmed@gmail.com"  # E-mail address for contact section
-    # customCSS                  = ["foo.css"]             # Include custom css files placed under assets/
+    # customCSS                    = ["/css/syntax.css", "/css/custom-style.css"]             # Include custom css files placed under assets/
     # customJS                   = ["foo.js"]              # Include custom JavaScript files placed under assets/
 
     # Configure the home page
     [params.home]
         introHeight              = "fullheight"            # Input either "medium" or "large" or "fullheight"
-        showLatest               = true                    # Show latest blog post summary
+        showLatest               = false                    # Show latest blog post summary
         showAllPosts             = true                    # Set true to list all posts on home page, or set false to link to separate blog list page
-        numberOfProjectsToShow   = 3                       # Maximum number of projects to show on home page. Unset or comment out to show all projects
+#        numberOfProjectsToShow   = 3                       # Maximum number of projects to show on home page. Unset or comment out to show all projects
         localTime                = true                    # Show your current local time in contact section
         timeZone                 = "Asia/Istanbul"         # Your timezone as in the TZ* column of this list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
         timeFormat               = "en-US"                 # Language specific format to use
@@ -34,7 +34,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
     [params.share]
         twitter                  = true
         facebook                 = true
-        googlePlus               = true
+        googlePlus               = false
         pinterest                = true
         instagram                = true # not available
     [params.blog]
@@ -82,14 +82,26 @@ DefaultContentLanguage           = "en"                    # Default language fo
 
 
 # If you don't want to use the default menu, you can define one by yourself
-# [[menu.main]]
-#     name    = "Home"
-#     url     = "/"
-#     weight  = 0
-# [[menu.main]]
-#     name    = "Blog"
-#     url     = "/blog/"
-#     weight  = 1
+[[menu.main]] 
+   name    = "Home"
+   url     = ""
+   weight  = 1
+[[menu.main]]
+   name    = "About"
+   url     = "about"
+   weight  = 2
+[[menu.main]]
+   name    = "Blog"
+   url     = "#blog"
+   weight  = 4
+[[menu.main]]
+   name    = "Who am I?"
+   url     = "#whoami"
+   weight  = 5
+[[menu.main]]
+   name    = "Contact"
+   url     = "#contact"
+   weight  = 6
 
 # We only use tag as a taxonomies
 # You can add more by yourself
@@ -100,7 +112,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
 [markup]
   defaultMarkdownHandler = "goldmark"
   [markup.goldmark]
-  [markup.goldmark.renderer]
+    [markup.goldmark.renderer]
     unsafe = true
   [markup.highlight]
     codeFences = true
