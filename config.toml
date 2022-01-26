@@ -28,7 +28,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
         timeZone                 = "Asia/Istanbul"         # Your timezone as in the TZ* column of this list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
         timeFormat               = "en-US"                 # Language specific format to use
     [params.projects]
-        useTwoColumns            = true                   # Use a layout with two columns instead of three
+        useTwoColumns            = false                   # Use a layout with two columns instead of three
 
     # Share buttons on blog post pages
     [params.share]

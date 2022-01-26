@@ -1,8 +1,7 @@
 ---
 resources:
 - params:
-    weight: -100
-  # src: plant.jpg
+   src: peloton.jpeg
 title: "Peloton"
 weight: 3
 ---
