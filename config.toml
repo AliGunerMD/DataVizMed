@@ -90,14 +90,15 @@ DefaultContentLanguage           = "en"                    # Default language fo
    name    = "About"
    url     = "about"
    weight  = 2
+
 [[menu.main]]
    name    = "Blog"
    url     = "#blog"
    weight  = 4
-[[menu.main]]
-   name    = "Who am I?"
-   url     = "#whoami"
-   weight  = 5
+#[[menu.main]]
+#   name    = "Who am I?"
+#   url     = "#whoami"
+#   weight  = 5
 [[menu.main]]
    name    = "Contact"
    url     = "#contact"
@@ -134,7 +135,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
         title            = "DataVizMed"
         [languages.en.params]
             description  = "Data Visualization in Medicine"           # Max 160 characters show in search results
-            footerText   = "Copyright © 2021 Ali Guner • GNU GPLv3 • Theme by [Victoria Drake](https://github.com/victoriadrake/hugo-theme-introduction) and [Athanasia Monika Mowinckel](https://github.com/Athanasiamo/DrMowinckels)"   # Text to override default footer text (markdown allowed)
+            footerText   = "Copyright © 2021 [Ali Guner](https://www.aliguner.com/) • GNU GPLv3 • Theme by [Victoria Drake](https://github.com/victoriadrake/hugo-theme-introduction) and [Athanasia Monika Mowinckel](https://github.com/Athanasiamo/DrMowinckels)"   # Text to override default footer text (markdown allowed)
 
 #    [languages.es]
 #        languageName     = "Español"
