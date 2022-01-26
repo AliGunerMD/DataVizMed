@@ -134,7 +134,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
         title            = "DataVizMed"
         [languages.en.params]
             description  = "Data Visualization in Medicine"           # Max 160 characters show in search results
-            footerText   = "Copyright © 2021 Ali Guner • GNU GPLv3"   # Text to override default footer text (markdown allowed)
+            footerText   = "Copyright © 2021 Ali Guner • GNU GPLv3 • \\n Theme by [Victoria Drake](https://github.com/victoriadrake/hugo-theme-introduction) and [Athanasia Monika Mowinckel](https://github.com/Athanasiamo/DrMowinckels)"   # Text to override default footer text (markdown allowed)
 
 #    [languages.es]
 #        languageName     = "Español"
