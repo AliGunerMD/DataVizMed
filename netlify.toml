@@ -13,5 +13,12 @@ command = 'hugo -F -b $DEPLOY_PRIME_URL'
 command = 'hugo -F -b $DEPLOY_PRIME_URL'
 
 [context.production]
+
 [context.production.environment]
-HUGO_ENV = 'production'
+  command = "hugo --buildFuture -b $DEPLOY_PRIME_URL"
+  HUGO_ENV = "production"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
