@@ -15,7 +15,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
     fadeInIndex                  = false                   # Turn on/off the fade-in effect on the index page even if fade-in was otherwise turned off
     dateFormat                   = "Jan 2, 2006"
     email                        = "datavizmed@gmail.com"  # E-mail address for contact section
-    # customCSS                    = ["/css/syntax.css", "/css/custom-style.css"]             # Include custom css files placed under assets/
+     customCSS                    = ["/css/syntax.css", "/css/custom-style.css"]             # Include custom css files placed under assets/
     # customJS                   = ["foo.js"]              # Include custom JavaScript files placed under assets/
 
     # Configure the home page
