@@ -2,7 +2,7 @@
 resources:
 - params:
     weight: -100
-  src: plant.jpg
+  src: pubmed.png
 title: "Journal Club"
 weight: 2
 output:
