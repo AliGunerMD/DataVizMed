@@ -15,9 +15,10 @@ tags:
 ---
 
 <!-- this is for the link button to GitHub-->
-<h1 style="font-family: Arial; font-size: 30px; text-decoration: underline">
-<a href="https://github.com/AliGunerMD/DataVizMed/blob/main/content/blog/2022-01-24-week-2/index.en.Rmarkdown/">GitHub</a>
-</h1>
+<button class="button">
+    <a href="https://github.com/AliGunerMD/DataVizMed/blob/main/content/blog/2022-01-24-week-2/index.en.Rmarkdown/"> <i class="fab fa-github"></i>GitHub</a>
+</button>
+
 <br><br>
 
 
@@ -29,7 +30,7 @@ Codes for the replica of Figure-2 will be here.
 
 ### Selected article:
 **Title:** [Assessment of Clinical Criteria for Sepsis  
-For the Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3)](https://jamanetwork.com/journals/jama/fullarticle/2492875)   
+For the Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3)](https://jamanetwork.com/journals/jama/fullarticle/2492875)     
 **Journal:** JAMA    
 **Authors:** Seymour CW, Liu VX, Iwashyna TJ et al.  
 **Year:** 2016  
