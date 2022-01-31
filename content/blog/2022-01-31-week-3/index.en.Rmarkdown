@@ -11,7 +11,6 @@ tags:
   - survival
   - Kaplan-Meier
   - survminer
-draft: yes
 ---
 
 <!-- this is for the GitHublink button -->
