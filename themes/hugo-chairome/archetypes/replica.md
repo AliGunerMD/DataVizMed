@@ -1,15 +1,18 @@
 ---
 title: "{{ replace .TranslationBaseName "-" " " | title }}"
 date: {{ .Date }}
+image: 
 draft: true
 ---
 
 <!-- this is for the link button to GitHub-->
 <button class="button">
-    <a href="https://github.com/AliGunerMD/DataVizMed/blob/main/content/blog/2022-01-24-week-2/index.en.Rmarkdown/"> <i class="fab fa-github"></i>GitHub</a>
+    <a href="https://github.com/AliGunerMD/DataVizMed/blob/main/content/blog/*<2022-MM-DD-week-XXX>*/index.en.Rmarkdown/"> <i class="fab fa-github"></i>GitHub</a>
 </button>
 
-<br><br>
+***
+
+<br>
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
@@ -18,7 +21,7 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 <br>
 
 ### Selected article:
-**Title:** [<article title>](<article link>))   
+**Title:** [<article title>](<article link>)   
 **Journal:** <Journal Name>    
 **Authors:** <Authors>   et al.  
 **Year:** <Year>    
@@ -51,6 +54,9 @@ theme_set(theme_light(base_family = "Open Sans"))
 
 ### Prepare fabricated data
 
+<br>
+
+### A part of fake dataset
 
 
 <br>
@@ -70,6 +76,6 @@ theme_set(theme_light(base_family = "Open Sans"))
 
 <br>
 
-### Some personal recommendations:   
+### Some personal comments:   
 
 <br><br>
