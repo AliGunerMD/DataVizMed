@@ -15,7 +15,7 @@ image: w6_replica.jpg
 
 <!-- this is for the link button to GitHub-->
 <button class="button">
-    <a href="https://github.com/AliGunerMD/DataVizMed/blob/main/content/blog/*<2022-MM-DD-week-XXX>*/index.en.Rmarkdown/"> <i class="fab fa-github"></i>GitHub</a>
+    <a href="https://github.com/AliGunerMD/DataVizMed/blob/main/content/blog/2022-02-21-week-6>*/index.en.Rmarkdown/"> <i class="fab fa-github"></i>GitHub</a>
 </button>
 
 ***
