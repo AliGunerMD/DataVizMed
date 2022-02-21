@@ -1,0 +1,387 @@
+---
+title: Week-6
+author: Ali Guner
+date: 2022-02-21T02:44:09+0300
+slug: []
+categories:
+  - figure
+tags:
+  - boxplot
+  - jittered points
+  - p-value
+  - log-scale
+image: w6_replica.jpg
+---
+
+<!-- this is for the link button to GitHub-->
+<button class="button">
+    <a href="https://github.com/AliGunerMD/DataVizMed/blob/main/content/blog/*<2022-MM-DD-week-XXX>*/index.en.Rmarkdown/"> <i class="fab fa-github"></i>GitHub</a>
+</button>
+
+***
+
+<br>
+
+
+<SHORT NOTE>
+<br>
+
+### Selected article:
+**Title:** [Iterative Cytoreduction and Hyperthermic Intraperitoneal Chemotherapy for Recurrent Mucinous Adenocarcinoma of the Appendix](https://link.springer.com/article/10.1245/s10434-021-11233-1)   
+**Journal:** Annals of Surgical Oncology   
+**Authors:**  Lopez-Ramirez F, Gushchin V, Sittig M,  et al.  
+**Year:** 2022    
+**PMID:** [35133518](https://pubmed.ncbi.nlm.nih.gov/35133518/)  
+**DOI:** 10.1245/s10434-021-11233-1    
+
+
+<br><br>
+
+### The original figure
+![Figure 1](w6_org.jpg)
+
+
+
+<br>
+
+### Import libraries
+
+```r
+suppressPackageStartupMessages(library(tidyverse)) 
+suppressPackageStartupMessages(library(scales))
+suppressPackageStartupMessages(library(cowplot))
+suppressPackageStartupMessages(library(ggtext))
+
+theme_set(theme_light(base_family = "Roboto Serif 28pt Medium"))
+```
+
+<br>
+
+### Prepare fabricated data
+
+
+```r
+# First CRS/HIPEC
+## number of patients: 40 (34-22) vs. 44 patients
+set.seed(2022)
+first_control_aca199 <-as_tibble(c(round(runif(29, min = 3, max = 18),2),
+                         round(runif(7, min = 18, max = 500),2),
+                         round(runif(4, min = 800, max = 4000),2))) %>% 
+  rename(first_control_aca199 = value)
+
+first_control_ca125 <- as_tibble(c(round(runif(15, min = 4, max = 100),2),
+                                   round(runif(23, min = 100, max = 250),2),
+                         round(runif(2, min = 250, max = 400),2))) %>% 
+  rename(first_control_ca125 = value)
+
+first_control_cea <- as_tibble(c(round(runif(20, min = .5, max = 5),2),
+                         round(runif(12, min = 10, max = 90),2),
+                         round(runif(8, min = 100, max = 1000),2))) %>% 
+  rename(first_control_cea = value)
+
+first_control_crp <- as_tibble(c(.02, .13, .15, .14, .12, .32, .61, 1.2, 1.3,
+                         round(runif(25, min = .7, max = 30),2),
+                         rep(NA_real_, 6))) %>% 
+  rename(first_control_crp = value)
+
+set.seed(2022)
+first_hipec_aca199 <- as_tibble(c(1.1, round(runif(31, min = 3, max = 23),2),
+                         round(runif(10, min = 23, max = 500),2),
+                         round(runif(2, min = 1000, max = 8000),2))) %>% 
+  rename(first_hipec_aca199 = value)
+
+first_hipec_ca125 <- as_tibble(c(round(runif(30, min = 4, max = 200),2),
+                                 round(runif(13, min = 200, max = 400),2),
+                         round(runif(1, min = 450, max = 700),2))) %>% 
+  rename(first_hipec_ca125 = value)
+
+first_hipec_cea <- as_tibble(c(.35, round(runif(18, min = .5, max = 5),2),
+                         round(runif(22, min = 10, max = 150),2),
+                         round(runif(3, min = 15, max = 500),2))) %>% 
+  rename(first_hipec_cea = value)
+
+first_hipec_crp <- as_tibble(c(.35, .36, 38, .56, .66, .77, .9,
+                         round(runif(14, min = .7, max = 20),2), 35,
+                         rep(NA_real_, 22))) %>% 
+  rename(first_hipec_crp = value)
+
+first_control <- bind_cols(first_control_aca199, first_control_ca125, first_control_cea, first_control_crp) %>% 
+  add_column(group = "control") %>% 
+  rename_with(str_remove, contains("_control_"), "control_")
+
+first_hipec <- bind_cols(first_hipec_aca199, first_hipec_ca125, first_hipec_cea, first_hipec_crp)%>% 
+  add_column(group = "hipec") %>% 
+  rename_with(str_remove, contains("_hipec_"), "hipec_")
+
+binded_first <- bind_rows(first_control, first_hipec)
+###------
+
+# Recurrence
+## number of patients: 45 (17-32) vs. 55 patients
+set.seed(2022)
+recurrence_control_aca199 <-as_tibble(c(round(runif(32, min = 3, max = 60),2),
+                         round(runif(12, min = 60, max = 1200),2),
+                         round(runif(1, min = 3000, max = 5000),2))) %>% 
+  rename(recurrence_control_aca199 = value)
+
+recurrence_control_ca125 <- as_tibble(c(round(runif(38, min = 3, max = 50),2),
+                         round(runif(7, min = 70, max = 150),2))) %>% 
+  rename(recurrence_control_ca125 = value)
+
+recurrence_control_cea <- as_tibble(c(round(runif(34, min = 1, max = 30),2),
+                         round(runif(10, min = 30, max = 40),2),
+                         round(runif(1, min = 2000, max = 3000),2))) %>% 
+  rename(recurrence_control_cea = value)
+
+recurrence_control_crp <- as_tibble(c(.21, .23, .22, .44, .44, .45, .65, 
+                         round(runif(10, min = 2, max = 12),2),
+                         rep(NA_real_, 28))) %>% 
+  rename(recurrence_control_crp = value)
+
+set.seed(2022)
+recurrence_hipec_aca199 <- as_tibble(c(round(runif(45, min = 3, max = 100),2),
+                         round(runif(7, min = 50, max = 400),2),
+                         round(runif(3, min = 800, max = 1500),2))) %>% 
+  rename(recurrence_hipec_aca199 = value)
+
+recurrence_hipec_ca125 <- as_tibble(c(round(runif(35, min = 3, max = 20),2),
+                                      round(runif(16, min = 30, max = 40),2),
+                         round(runif(4, min = 40, max = 100),2))) %>% 
+  rename(recurrence_hipec_ca125 = value)
+
+recurrence_hipec_cea <- as_tibble(c(round(runif(52, min = 1, max = 40),2),
+                         round(runif(3, min = 50, max = 200),2))) %>% 
+  rename(recurrence_hipec_cea = value)
+
+recurrence_hipec_crp <- as_tibble(c(.1, .1, .1, .1, .1, .1, .15, .15, .25, 
+                         round(runif(8, min = 4, max = 10),2),
+                         rep(NA_real_, 38))) %>% 
+  rename(recurrence_hipec_crp = value)
+
+recurrence_control <- bind_cols(recurrence_control_aca199, recurrence_control_ca125, recurrence_control_cea, recurrence_control_crp) %>% 
+  add_column(group = "control") %>% 
+  rename_with(str_remove, contains("_control_"), "control_")
+
+recurrence_hipec <- bind_cols(recurrence_hipec_aca199, recurrence_hipec_ca125, recurrence_hipec_cea, recurrence_hipec_crp)%>% 
+  add_column(group = "hipec") %>% 
+  rename_with(str_remove, contains("_hipec_"), "hipec_")
+
+binded_recurrence <- bind_rows(recurrence_control, recurrence_hipec)
+```
+
+
+<br>
+
+### A part of fake dataset
+
+
+```r
+binded_first %>% 
+  sample_n(6)
+```
+
+```
+## # A tibble: 6 × 5
+##   first_aca199 first_ca125 first_cea first_crp group  
+##          <dbl>       <dbl>     <dbl>     <dbl> <chr>  
+## 1       213.         217.     264.       20.3  control
+## 2        14.4        167.      97.0      NA    hipec  
+## 3        13.3        109.       3.08     14.2  hipec  
+## 4         5.74        93.9    113.       NA    hipec  
+## 5       407.         358.     128.       NA    hipec  
+## 6        19.3        174.       1.54      0.36 hipec
+```
+
+```r
+binded_recurrence %>% 
+  sample_n(6)
+```
+
+```
+## # A tibble: 6 × 5
+##   recurrence_aca199 recurrence_ca125 recurrence_cea recurrence_crp group  
+##               <dbl>            <dbl>          <dbl>          <dbl> <chr>  
+## 1             34               20.1           14.4            0.44 control
+## 2             64.8              4.3           28.4           NA    hipec  
+## 3           4734.             135.          2858.            NA    control
+## 4              9.86            32.5           19.4            0.22 control
+## 5             17.0             10.8            4.83           4.08 hipec  
+## 6             49.5              7.73           7.2            0.21 control
+```
+
+
+<br>
+
+**Possible strategy:**   
+I m still a fan of using facets for all figure.
+
+However, for the current figure, two different is needed.  
+in the first one, x_axis label is in top position, in the second one, in bottom position.  
+
+Although there are packages to implement p-values automatically, I prefer adding it after manual calculation.
+  
+[annotation_logticks()](https://ggplot2.tidyverse.org/reference/annotation_logticks.html), which is a part of {ggplot2}, can provide log_scaled ticks for a plot. However, in a selective scaling (the most left, and the most right) in faceted plots, a custom function was used here. [add_logticks()](https://stackoverflow.com/questions/20128582/is-it-possible-to-have-annotation-logtics-appear-on-only-one-of-the-subplots-u) is a custom function which was provided by the great R community. 
+
+
+<br>
+
+### R codes for the figure
+
+```r
+add_logticks  <- function (base = 10, sides = "bl", scaled = TRUE, 
+                           short = unit(0.1, "cm"), mid = unit(0.2, "cm"),  long = unit(0.3, "cm"), 
+                           colour = "black",  size = 0.5, linetype = 1, alpha = 1, color = NULL, 
+                           data =data.frame(x = NA),... )   {
+  if (!is.null(color)) 
+    colour <- color
+  layer(geom = "logticks", params = list(base = base, 
+                                              sides = sides, scaled = scaled, short = short, 
+                                              mid = mid, long = long, colour = colour, size = size, 
+                                              linetype = linetype, alpha = alpha, ...), 
+        stat = "identity", data = data , mapping = NULL, inherit.aes = FALSE, position = "identity",
+        show.legend = FALSE)
+}
+
+my_y_labels <- c(0, .01, .1, .5, 1, 5, 10, 50, 100, 500, "1,000", "10,000")
+
+test_names <- as_labeller(c(
+  "aca199" = "CA 19-9",
+  "ca125" = "CA 125",
+  "cea" = "CEA",
+  "crp" = "CRP"
+)) # not used because were removed, manual inside text (facet_labels) were used.
+
+facet_labels <- data.frame(test = c("aca199", "ca125", "cea", "crp"), 
+                       label = c("CA 19-9 [U/mL]", "CA 125 [U/mL]", "CEA [ng/mL]", "CRP [mg/mL]"))
+
+### First plot
+stats_data_first <- binded_first %>% 
+   pivot_longer(first_aca199:first_crp,
+               names_to = "names",
+               values_to = "values") %>% 
+  separate(names, into = c("time", "test"), sep = "_") %>% 
+  group_by(test) %>% 
+  summarise(p_value = round(wilcox.test(values~group)$p.value, 2)) %>% 
+  mutate(label = if_else(p_value < .05 , paste0(p_value, "*"), as.character(p_value)),
+         label_asteriks = if_else(p_value == 0, "p<0.01*", paste0("p=", as.character(label))))
+
+p1 <- binded_first %>% 
+   pivot_longer(first_aca199:first_crp,
+               names_to = "names",
+               values_to = "values") %>% 
+  separate(names, into = c("time", "test"), sep = "_") %>% 
+  ggplot(aes(group, values)) + 
+  stat_boxplot(geom ="errorbar", width = .3, size=.7,  coef = 1) +
+  geom_boxplot(width = .55, outlier.shape = NA,  coef = 1) +
+  geom_point(position = position_jitter(seed = 2021, width = .25), aes(color = group, shape = group),  alpha = .4, size = 3.5) +
+  scale_y_continuous(trans = "log10", breaks = c(0, .01, .1, .5, 1, 5, 10, 50, 100, 500, 1000, 10000), 
+                     limits = c(0.003,9500), 
+                     labels = as.character(my_y_labels)) +
+  scale_color_manual(values =  c("#3D528F", "#F25858")) +
+  facet_wrap(~ test,  nrow = 1, strip.position = "right") +
+  add_logticks(sides="l", data = data.frame(x= NA, test = "aca199")) +
+  add_logticks(sides="r", data = data.frame(x= NA, test = "crp")) +
+  scale_x_discrete(position = "top", labels = c("Controls", "iCRS/HIPEC")) +
+  theme(strip.text = element_blank(),
+        panel.spacing = unit(0, "cm"),
+        panel.border = element_rect(color = "black", size = .8),
+        axis.text.x = element_text(size = 16, vjust = 1, family = "Roboto Serif 28pt Medium"),
+        axis.ticks.x.top = element_line(color = "black", size = .5),
+        axis.ticks.length = unit(-0.2, "cm"),
+        axis.title.y = element_text(size = 18, color = "black"),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.text.y = element_text(size = 16,  family = "Roboto Serif 28pt Medium"),
+        legend.position = "none",
+        panel.grid = element_blank(),
+        plot.margin=unit(c(0,1,0,1),"cm")) +
+  labs(x = "",
+       y = "First CRS/HIPEC") +
+  geom_rect(xmin=1, xmax=2, ymin=-1.7, ymax=-2.3, color="black", fill="white", size = .5)+
+  geom_text(data = facet_labels, aes(x = 1.5, y = .01, label = label), size = 4.1, family = "Roboto Serif 28pt Medium") +
+  geom_text(data = stats_data_first, aes(x = 1.5, y = 3900, label = label_asteriks), size = 5) +
+  geom_segment(aes(x=1, xend=2, y=2300, yend=2300), color="black") +
+  geom_segment(aes(x=1, xend=1, y=1600, yend=3500), color="black") +
+  geom_segment(aes(x=2, xend=2, y=1600, yend=3500), color="black") 
+
+### Second plot
+stats_data_recurrence <- binded_recurrence %>% 
+   pivot_longer(recurrence_aca199:recurrence_crp,
+               names_to = "names",
+               values_to = "values") %>% 
+  separate(names, into = c("time", "test"), sep = "_") %>% 
+  group_by(test) %>% 
+  summarise(p_value = round(wilcox.test(values~group)$p.value, 2)) %>% 
+  mutate(label = if_else(p_value < .05 , paste0(p_value, "*"), as.character(p_value)),
+         label_asteriks = if_else(p_value == 0, "p<0.01*", paste0("p=", as.character(label))))
+
+p2 <- binded_recurrence %>% 
+   pivot_longer(recurrence_aca199:recurrence_crp,
+               names_to = "names",
+               values_to = "values") %>% 
+  separate(names, into = c("time", "test"), sep = "_") %>% 
+  ggplot(aes(group, values)) + 
+  stat_boxplot(geom ="errorbar", width = .3, size=.7,  coef = 1) +
+  geom_boxplot(width = .55, outlier.shape = NA,  coef = 1) +
+  geom_point(position = position_jitter(seed = 2021, width = .25), aes(color = group, shape = group),  alpha = .4, size = 3.5) +
+  scale_y_continuous(trans = "log10", breaks = c(0, .01, .1, .5, 1, 5, 10, 50, 100, 500, 1000, 10000), 
+                     limits = c(0.003,9500), 
+                     labels = as.character(my_y_labels)) +
+  scale_color_manual(values =  c("#3D528F", "#F25858")) +
+  facet_wrap(~ test,  nrow = 1, strip.position = "right") +
+  add_logticks(sides="l", data = data.frame(x= NA, test = "aca199")) +
+  add_logticks(sides="r", data = data.frame(x= NA, test = "crp")) +
+  scale_x_discrete(position = "bottom", labels = c("Controls", "iCRS/HIPEC")) +
+  theme(strip.text = element_blank(),
+        panel.spacing = unit(0, "cm"),
+        panel.border = element_rect(color = "black", size = .8),
+        axis.text.x = element_text(size = 16, vjust = 1, family = "Roboto Serif 28pt Medium"),
+        axis.ticks.x.bottom = element_line(color = "black", size = .5),
+        axis.ticks.length = unit(-0.2, "cm"),
+        axis.title.y = element_text(size = 18, color = "black"),
+        axis.ticks.y = element_line(color = "black", size = .5),
+        axis.text.y = element_text(size = 16,  family = "Roboto Serif 28pt Medium"),
+        legend.position = "none",
+        panel.grid = element_blank(),
+        plot.margin=unit(c(.5,1,0,1),"cm")) +
+  labs(x = "",
+       y = "First Recurrence") +
+  geom_rect(xmin=1, xmax=2, ymin=-1.7, ymax=-2.3, color="black", fill="white", size = .5)+
+  geom_text(data = facet_labels, aes(x = 1.5, y = .01, label = label), size = 4.1, family = "Roboto Serif 28pt Medium") +
+  geom_text(data = stats_data_recurrence, aes(x = 1.5, y = 3900, label = label_asteriks), size = 5) +
+  geom_segment(aes(x=1, xend=2, y=2300, yend=2300), color="black") +
+  geom_segment(aes(x=1, xend=1, y=1600, yend=3500), color="black") +
+  geom_segment(aes(x=2, xend=2, y=1600, yend=3500), color="black") 
+
+### Combine plots with cowplot::plot_grid
+final_replica <- plot_grid(p1, p2, labels = c("(a)", "(b)"), ncol = 1, label_size = 18)
+
+### SAVE FIGURE
+ggsave(final_replica,
+       file =file.path ("w6_replica.jpg"),
+       dpi = 300,
+       width = 13,
+       height = 10)
+```
+
+
+<br>
+
+### Final replica
+![replica Figure 1](w6_replica.jpg)
+
+<br>
+
+### Some personal comments: 
+1. It is stated in the article that "Horizontal lines represent upper limit of normal range...". However, there is no such lines in the figure.  
+1. It is stated in the article that "Medians were compared". However, the main parameter to compare was the disribution, not a single median values.  
+1. Width of the jittered points in the original figures are different. First one is larger than the second one.  
+1. I believe, there are some problems in the missing values, especially in CRP.  
+1. no idea why dashed lines were used in errorbars.  
+1. There are X-axis ticks on top and bottom. I used only in one side.  
+1. vjust did not work in axis.text.x(). Do not know why.
+1. There was a problem for factor reordering after add_logtics(). I solved this in naming variables.  
+1. Still not sure about the font. Can be updated.  
+1. It would be better to use logticks in every facets. It is difficult to follow in the center.
+
+
+<br><br>
