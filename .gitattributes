@@ -1,11 +1,11 @@
 # DataVizMed
 
-*.R linguist-detectable=true
-*.html linguist-detectable=false
-*.JavaScript linguist-detectable=false
-*.css linguist-detectable=false
-*.java linguist-detectable=false
-*.python linguist-detectable=false 
-*.SASS linguist-detectable=false
-*.xml linguist-detectable=false 
-*.Rmd linguist-language=R
+# *.R linguist-detectable=true
+# *.html linguist-detectable=false
+# *.JavaScript linguist-detectable=false
+# *.css linguist-detectable=false
+# *.java linguist-detectable=false
+# *.python linguist-detectable=false 
+# *.SASS linguist-detectable=false
+# *.xml linguist-detectable=false 
+# *.Rmd linguist-language=R
