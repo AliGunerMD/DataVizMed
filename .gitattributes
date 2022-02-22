@@ -8,3 +8,4 @@
 *.python linguist-detectable=false 
 *.SASS linguist-detectable=false
 *.xml linguist-detectable=false 
+*.Rmd linguist-language=R
