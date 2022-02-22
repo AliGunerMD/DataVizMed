@@ -1,0 +1,3 @@
+# DataVizMed
+
+*.html linguist-detectable=false
