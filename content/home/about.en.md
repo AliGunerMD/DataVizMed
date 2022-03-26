@@ -15,7 +15,7 @@ is a part of
 
  share informative, elegant visualization from high-quality articles  
  prepare a replica of the published visualization by using fabricated data and R  
- implement (and share) powerful R packages with reproducible codes  
+ implement (and share) powerful R packages with reproducible R codes  
  improve literate programming  
  improve reproducible research  
  improve reporting of clinical experimental/observational studies  
