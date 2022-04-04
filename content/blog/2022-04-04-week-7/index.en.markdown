@@ -1,5 +1,5 @@
 ---
-title: week-7
+title: Week-7
 author: Ali Guner
 date: 2022-04-04T11:15:13+0300
 slug: []
