@@ -6,7 +6,7 @@ weight: 04
 
 <h1 style="color:#A02E2F;">DataVizMed</h1>  
 
-is a part of   
+is a part off   
 #### **AcadeMD Project**   
   
  <br><br>
