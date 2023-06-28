@@ -11,7 +11,7 @@ tags:
   - Surgery
 
 image: w10_replica.jpg
-draft: yes
+draft: no
 ---
 
 <!-- this is for the link button to GitHub-->
