@@ -1,5 +1,5 @@
 ---
-title: Other projects
+title: "Other projects"
 type: projects
 weight: 20
 ---
