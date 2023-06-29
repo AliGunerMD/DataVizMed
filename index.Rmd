@@ -1,5 +1,6 @@
 ---
 site: blogdown:::blogdown_site
+always_allow_html: true
 ---
 
 <!-- This file is for blogdown only. Please do not edit it. -->
