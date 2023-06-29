@@ -9,10 +9,11 @@ HUGO_VERSION = '0.91.2'
 [context.branch-deploy]
 command = 'hugo -F -b $DEPLOY_PRIME_URL'
 
-[context.deploy-preview]
-command = 'hugo -F -b $DEPLOY_PRIME_URL'
+
 
 [context.production]
+[context.deploy-preview]
+  command = "hugo --buildFuture -b $DEPLOY_PRIME_URL"
 
 [context.production.environment]
   command = "hugo --buildFuture -b $DEPLOY_PRIME_URL"
