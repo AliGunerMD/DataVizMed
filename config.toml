@@ -2,7 +2,9 @@ baseURL                          = "https://datavizmed.com/" # Your domain name.
 googleAnalytics                  = "G-BG9BYKTRW0"            # https://gohugo.io/templates/internal/#google-analytics
 disqusshortname                  = "datavizmed-com"          # https://gohugo.io/content-management/comments
 theme                            = "hugo-chairome"
+title                            = "DataVizMed"
 DefaultContentLanguage           = "en"                    # Default language for multilingual sites
+canonifyurls                     = true
 
 [params]
     themeStyle                   = "light"                 # Choose "light" or "dark"
