@@ -192,7 +192,7 @@ finalfit_table %>%
 modified_finalfit_table <- finalfit_table %>% 
   separate("no reexcision", into = c("n", "perc"), sep = " ") %>% 
   mutate(n = as.numeric(n)) %>% 
-  mutate(n = if_else(n / 1000 > 10, format(n, big.mark = " ", digits = 0, scientific = FALSE), as.character(n)),
+  mutate(n = if_else(n / 1000 > 10, format(n, big.mark = " ", digits = 1, scientific = FALSE), as.character(n)),
          n = paste0(n, " ", perc)) %>% 
   rename("no reexcision" = "n") %>% 
   select(-perc) %>% 
