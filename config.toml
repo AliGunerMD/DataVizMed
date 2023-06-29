@@ -3,6 +3,7 @@ googleAnalytics                  = "G-BG9BYKTRW0"            # https://gohugo.io
 disqusshortname                  = "datavizmed-com"          # https://gohugo.io/content-management/comments
 theme                            = "hugo-chairome"
 DefaultContentLanguage           = "en"                    # Default language for multilingual sites
+ignoreFiles                      = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
 
 [params]
     themeStyle                   = "light"                 # Choose "light" or "dark"
