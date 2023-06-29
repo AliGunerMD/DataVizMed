@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+
+    <head>
+        {{ partial "head/metadata.html" . }}
+        {{ partial "head/openGraph.html" . }}
+        {{ partial "head/favicons.html" . }}
+        {{ partial "head/css.html" . }}
+        {{ partial "css/owlCarousel.html" . }}
+        
+        {{if isset .Site.Params "customhead" }}
+            {{ partial .Site.Params.customHead . }}
+        {{end}}
+        
+    </head>
+
+    <body>
+        {{ partial "hero.html" . }}
+
+        {{ with .Site.GetPage "/home" }}
+        {{ $home := . }}
+        {{ $pages := .Resources.ByType "page" }}
+
+        {{ range .Site.Sections }}
+            {{ $pages = $pages | append . }}
+        {{ end }}
+
+        {{ range sort $pages "Params.weight" }}
+        {{ if ne .Name "contact.md" }}
+        {{ if eq .Params.type "projects" }}
+            <!-- Now for some cool projects -->
+            {{ partial "home/projects.html" . }}
+        {{ else if eq .Params.type "blog" }}
+            <!-- Let`s show some blog posts -->
+            {{ partial "home/blog.html" . }}
+        {{ else if or (eq .Params.type "home") (eq .Params.type "about") }}
+        <!-- Range through all sections in /home execept contact.md -->
+        <div class="section" id="{{ .File.TranslationBaseName }}">
+            <div class="container">
+                <a href="{{ .RelPermalink | relLangURL }}">
+                    <h2 class="title is-2 has-text-centered">{{ .Title | markdownify }}</h2>
+                </a>
+                {{ if .Params.Image }}
+                <div class="columns">
+                    <div class="column is-one-third has-text-centered">
+                        <img class="img-responsive avatar" src="{{ printf "%s%s" .RelPermalink .Params.Image }}" alt="{{ .Name }}">
+                    </div>
+                    <div class="markdown column">
+                        {{ .Summary }}
+                        {{ if .Truncated }}
+                        <a href="{{ .RelPermalink | relLangURL }}">{{ i18n "index_blog_readMore" . }}</a>
+                        {{ end }}
+                    </div>
+                </div>
+                {{ else }}
+                <div class="markdown has-text-centered">
+                    {{ .Content }}
+                    
+                    {{ if .Truncated }}
+                    <a href="{{ .RelPermalink | relLangURL }}">{{ i18n "index_blog_readMore" . }}</a>
+                    {{ end }}
+                </div> 
+                {{ end }}
+            </div>
+            <!-- End About container-->
+            {{ partial "top-icon.html" . }}
+        </div>
+        <div class="container">
+            <hr>
+        </div>
+        {{ end }}
+        {{ end }}
+        {{ end }}
+        <!-- Let`s chat, shall we? -->
+        {{ with .Resources.GetMatch "contact.md" }}
+        <div class="section" id="{{ .File.TranslationBaseName }}">
+            <div class="container has-text-centered">
+                <h2 class="title is-2">{{ .Title | markdownify }}</h2>
+                <div class="markdown">
+                    {{ .Content }}
+                </div>
+                {{ if .Site.Params.home.localTime }}
+                <p>{{ i18n "index_currentTime" . }} <span id="time"></span>.</p>
+                {{ end }}
+                {{ with .Site.Params.email }}
+                <h3 class="subtitle is-3 has-text-centered top-pad">
+                    <a href="mailto:{{ . }}">{{ . }}</a>
+                </h3>
+                {{ end }}
+                {{ partial "home/social.html" . }}
+            </div>
+            <!-- End Contact container -->
+            {{ partial "top-icon.html" . }}
+        </div>
+        <div class="container">
+            <hr>
+        </div>
+        {{ end }}
+        <!-- End Contact section -->
+        {{ end }}
+
+        {{ partial "footer/text.html" . }}
+
+        <!-- End of fade in three section -->
+        {{ partial "footer/scripts.html" . }}
+        {{ partial "js/owlCarousel.html" . }}
+
+        {{ if .Site.Params.home.localTime }}
+        <script>
+            function update_localtime() {
+                const time = new Date().toLocaleTimeString('{{ .Site.Params.home.timeFormat }}', { timeZone: '{{ .Site.Params.home.timeZone }}', timeStyle: 'short' });
+                document.getElementById('time').innerHTML = time;
+            }
+            update_localtime();
+            // Updating every second to prevent seconds looking like stood still when timeStyle is ignored.
+            setInterval(update_localtime, 1000);
+        </script>
+        {{ end }}
+    </body>
+
+</html>
