@@ -1,20 +1,20 @@
 [build]
-command = 'hugo'
-publish = 'public'
+        command = 'hugo'
+        publish = 'public'
 [build.environment]
-HUGO_VERSION = '0.91.2'
+        HUGO_VERSION = '0.91.2'
 
 
 [context]
-[context.branch-deploy]
-command = "hugo --buildFuture -b $DEPLOY_PRIME_URL"
+ [context.branch-deploy]
+        command = "hugo --buildFuture -b $DEPLOY_PRIME_URL"
 
-[context.deploy-preview]
-ccommand = "hugo --buildFuture -b $DEPLOY_PRIME_URL"
+ [context.deploy-preview]
+        command = "hugo --buildFuture -b $DEPLOY_PRIME_URL"
 
-[context.production]
+ [context.production]
 
-[context.production.environment]
+ [context.production.environment]
   command = "hugo --buildFuture -b $DEPLOY_PRIME_URL"
   HUGO_ENV = "production"
 
