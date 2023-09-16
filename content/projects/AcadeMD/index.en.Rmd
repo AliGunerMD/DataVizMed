@@ -1,6 +1,6 @@
 ---
 title: "AcadeMD"
-date: 2022-01-16
+date: "2022-01-16"
 image: "AcadeMD_logo.png"
 output:
   html_document:
