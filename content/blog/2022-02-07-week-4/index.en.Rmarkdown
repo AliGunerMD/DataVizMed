@@ -53,6 +53,7 @@ Tables are also a part of data visualization. Elegant tables may make your artic
 ```{r, echo = TRUE}
 library(tidyverse)
 library(fabricatr)      # to fabricate fake data
+# library(kableExtra)   # if needed
 
 library(finalfit)       # to create final output tables
 library(flextable)      # to create/modify/format tables for reporting and publications
