@@ -62,8 +62,8 @@ Then, I use **flextable()** to modify my summarized tibble.
 
 ```r
 summary_col <- mtcars %>% 
-  summarise(nb = n(), .by = c(cyl, gear, am)) %>% 
-  arrange(cyl, gear, am) %>% 
+        summarise(nb = n(), .by = c(cyl, gear, am)) %>%
+        arrange(cyl, gear, am) %>% 
         pivot_wider(names_from = "am",
                     values_from = "nb",
                     names_prefix = "am_",
@@ -79,11 +79,12 @@ summary_all <- summary_row %>%
         add_column(gear = "", .before = 1) %>% 
         add_column(cyl = "Total", .before = 1) 
 
-summary_table <- bind_rows(summary_row %>% 
-                  mutate(across(everything(), as.character)), 
-          summary_col %>% 
+summary_table <- bind_rows(
+        summary_row %>% 
                   mutate(across(everything(), as.character)),
-          summary_all %>% 
+        summary_col %>% 
+                  mutate(across(everything(), as.character)),
+        summary_all %>% 
                   mutate(across(everything(), as.character))) %>% 
         arrange(cyl, gear) %>% 
         mutate(across(am_0:total, ~str_replace_all(., "0", NA_character_))) 
