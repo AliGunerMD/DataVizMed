@@ -1,5 +1,5 @@
 ---
-title: "W11: Summary table"
+title: "W11: Custom summary table"
 author: Ali Guner
 date: 2023-10-13T11:11:13+0300
 slug: []
@@ -8,7 +8,7 @@ categories:
 tags:
   - grouped summary
 image: w11_replica.jpg
-draft: yes
+draft: no
 editor_options: 
   chunk_output_type: console
 ---
