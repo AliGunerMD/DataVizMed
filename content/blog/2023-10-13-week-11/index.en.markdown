@@ -20,7 +20,10 @@ editor_options:
 
 ***
 a question from twitter by [JulienMouchnino](https://twitter.com/JulienMouchnino),  
-can we prepare grouped summary table with flextable?
+can we prepare grouped summary table with flextable?  
+
+<br>
+Although this is not related to medicine, can be used in any table, therefore I shared it here.  
 
 
 <br>
