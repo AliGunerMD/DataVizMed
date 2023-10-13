@@ -31,7 +31,7 @@ can we prepare grouped summary table with flextable?
 
 <br><br>
 
-### The original figure
+### The original table
 ![requested table](w11_org.jpg)
 
 
@@ -121,7 +121,7 @@ flex_summary <- summary_table %>%
 
 ```r
 save_as_docx(flex_summary,
-             path = here::here("content", "blog", "2023-10-13-week-11",paste0("flex_summary", ".docx")))
+             path = here::here("content", "blog", "2023-10-13-week-11", paste0("flex_summary", ".docx")))
 ```
 
 
