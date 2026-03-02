@@ -1,0 +1,811 @@
+---
+title: W14 - Multiple line plot for time trend
+author: Ali Guner
+date: 2025-04-12T11:10:13+0300
+slug: []
+categories:
+  - figure
+tags:
+  - Line plot
+  - Cox
+image: w14_replica.jpg
+draft: yes
+editor_options: 
+  chunk_output_type: console
+---
+```{r echo=FALSE, results='hide'}
+
+# renv::use(lockfile = "content/blog/2024-05-12-week-14/renv.lock")
+
+```
+
+<!-- this is for the link button to GitHub-->
+<button class="button">
+    <a href="https://github.com/AliGunerMD/DataVizMed/blob/main/content/blog/2025-04-12-week-14/index.en.Rmarkdown/"> <i class="fab fa-github"></i>GitHub</a>
+</button>
+
+***
+
+<br>
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+<br>
+
+### Selected article:
+**Title:** [Gastroenteropancreatic Neuroendocrine Tumor Incidence by Sex and Age in the US](https://jamanetwork.com/journals/jamaoncology/fullarticle/2829036?guestAccessKey=67da1586-c86b-42ff-ba07-a71fa4cf6c5e&utm_source=twitter&utm_medium=social_jamaonc&utm_term=15837949917&utm_campaign=article_alert&linkId=717449692)  
+**Journal:** JAMA Oncology  
+**Authors:** Yazan Abboud, Anand Shah, Riya Sutariya, et al.
+**Year:** 2025  
+**PMID:** [39821008](https://pubmed.ncbi.nlm.nih.gov/39821008/)   
+**DOI:** [10.1001/jamaoncol.2024.5937](https://pubmed.ncbi.nlm.nih.gov/39821008/). 
+
+
+<br><br>
+
+### The original figure
+![Visual abstract](w14_org.jpg)
+
+
+
+<br>
+
+### Import libraries
+```{r, echo = TRUE}
+
+# Define the required package names
+packages <- c("tidyverse", "scales", "fabricatr", "glue", 
+              "cowplot",
+              "finalfit",
+              "survminer", "survival")
+
+# Function to check, install, and load packages
+load_packages <- function(packages) {
+        
+  for (package in packages) {
+    if (!require(package, character.only = TRUE)) {
+        install.packages(package)
+        library(package, character.only = TRUE)
+    } else {
+      # suppressPackageStartupMessages(library(package, character.only = TRUE))
+        library(package, character.only = TRUE)
+    }
+  }
+}
+
+load_packages(packages)
+
+
+theme_set(theme_light(base_family = "Helvetica"))
+
+
+
+```
+
+<br>
+
+
+
+
+### Prepare fabricated data 
+(Claude 3.7 Sonnet was used to extract data from the original figure)  
+
+```{r}
+library(fabricatr)  
+library(tidyverse)  
+library(cowplot)  
+
+# Create the pancreas dataset with all demographics and years  
+pancreas_data <- fabricate(  
+  N = 5 * 19,  # 5 demographics, 19 years  
+  Organ = "Pancreas",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.35, 0.35, 0.36, 0.37, 0.38, 0.40, 0.43, 0.46, 0.49, 0.52,   
+    0.56, 0.65, 0.85, 0.95, 1.05, 1.10, 1.15, 1.20, 1.20,  
+    # Male  
+    0.35, 0.36, 0.37, 0.38, 0.40, 0.42, 0.45, 0.48, 0.50, 0.53,   
+    0.60, 0.70, 0.90, 1.00, 1.15, 1.20, 1.25, 1.30, 1.30,  
+    # Female  
+    0.20, 0.22, 0.23, 0.25, 0.27, 0.30, 0.32, 0.35, 0.37, 0.40,   
+    0.45, 0.55, 0.65, 0.70, 0.75, 0.80, 0.90, 0.95, 0.95,  
+    # Older adults  
+    0.65, 0.66, 0.67, 0.69, 0.72, 0.75, 0.80, 0.85, 0.90, 0.95,   
+    1.05, 1.20, 1.60, 1.90, 2.30, 3.00, 3.30, 3.40, 3.30,  
+    # Young adults  
+    0.15, 0.16, 0.17, 0.18, 0.19, 0.20, 0.22, 0.25, 0.28, 0.32,   
+    0.38, 0.42, 0.48, 0.58, 0.60, 0.61, 0.62, 0.63, 0.63  
+  )  
+) %>% select(-ID)  
+
+# Create the appendix dataset  
+appendix_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Appendix",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.10, 0.10, 0.10, 0.11, 0.12, 0.12, 0.13, 0.13, 0.14, 0.14,   
+    0.15, 0.15, 0.25, 0.40, 0.60, 0.62, 0.65, 0.67, 0.69,  
+    # Male  
+    0.10, 0.10, 0.10, 0.11, 0.12, 0.12, 0.13, 0.13, 0.14, 0.14,   
+    0.15, 0.15, 0.25, 0.40, 0.60, 0.62, 0.65, 0.67, 0.69,  
+    # Female  
+    0.10, 0.10, 0.10, 0.11, 0.11, 0.12, 0.12, 0.13, 0.13, 0.14,   
+    0.14, 0.15, 0.25, 0.40, 0.80, 0.82, 0.85, 1.05, 1.05,  
+    # Older adults  
+    0.20, 0.20, 0.22, 0.25, 0.27, 0.28, 0.30, 0.32, 0.33, 0.35,   
+    0.36, 0.37, 0.80, 0.95, 1.00, 1.00, 1.00, 1.00, 1.00,  
+    # Young adults  
+    0.05, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.14,   
+    0.18, 0.22, 0.40, 0.60, 1.00, 1.00, 1.05, 1.08, 1.10  
+  )  
+) %>% select(-ID)  
+
+# Create the duodenum dataset  
+duodenum_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Duodenum",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.20, 0.22, 0.23, 0.25, 0.27, 0.29, 0.30, 0.32, 0.33, 0.35,   
+    0.36, 0.38, 0.39, 0.41, 0.42, 0.44, 0.45, 0.47, 0.48,  
+    # Male  
+    0.25, 0.26, 0.27, 0.29, 0.31, 0.32, 0.33, 0.35, 0.36, 0.38,   
+    0.39, 0.41, 0.42, 0.43, 0.45, 0.47, 0.48, 0.50, 0.50,  
+    # Female  
+    0.15, 0.16, 0.17, 0.18, 0.19, 0.21, 0.22, 0.24, 0.25, 0.27,   
+    0.28, 0.30, 0.31, 0.32, 0.34, 0.36, 0.37, 0.39, 0.40,  
+    # Older adults  
+    0.60, 0.62, 0.64, 0.66, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95,   
+    1.00, 1.05, 1.10, 1.15, 1.20, 1.30, 1.40, 1.45, 1.50,  
+    # Young adults  
+    0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19,   
+    0.20, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28  
+  )  
+) %>% select(-ID)  
+
+# Create the colon dataset  
+colon_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Colon",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.20, 0.20, 0.19, 0.19, 0.18, 0.18, 0.17, 0.17, 0.17, 0.17,   
+    0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17,  
+    # Male  
+    0.20, 0.20, 0.19, 0.19, 0.18, 0.18, 0.17, 0.17, 0.17, 0.17,   
+    0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17,  
+    # Female  
+    0.20, 0.19, 0.19, 0.18, 0.18, 0.18, 0.17, 0.17, 0.17, 0.17,   
+    0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.16,  
+    # Older adults  
+    0.55, 0.54, 0.53, 0.52, 0.52, 0.51, 0.51, 0.50, 0.50, 0.50,   
+    0.50, 0.50, 0.49, 0.49, 0.48, 0.48, 0.47, 0.47, 0.47,  
+    # Young adults  
+    0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18,   
+    0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18  
+  )  
+) %>% select(-ID)  
+
+# Create the cecum dataset  
+cecum_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Cecum",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.15, 0.15, 0.16, 0.16, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17,   
+    0.17, 0.17, 0.16, 0.16, 0.16, 0.16, 0.16, 0.16, 0.16,  
+    # Male  
+    0.15, 0.16, 0.17, 0.17, 0.18, 0.18, 0.18, 0.18, 0.18, 0.18,   
+    0.18, 0.18, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17, 0.17,  
+    # Female  
+    0.10, 0.11, 0.12, 0.12, 0.13, 0.13, 0.14, 0.14, 0.14, 0.14,   
+    0.14, 0.14, 0.14, 0.14, 0.14, 0.14, 0.14, 0.14, 0.14,  
+    # Older adults  
+    0.40, 0.42, 0.45, 0.46, 0.47, 0.47, 0.48, 0.48, 0.48, 0.48,   
+    0.47, 0.47, 0.46, 0.46, 0.46, 0.46, 0.45, 0.45, 0.45,  
+    # Young adults  
+    0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19,   
+    0.20, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28  
+  )  
+) %>% select(-ID)  
+
+# Create the biliary tract dataset  
+biliary_tract_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Biliary tract",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.15, 0.15, 0.16, 0.16, 0.17, 0.17, 0.18, 0.18, 0.19, 0.19,   
+    0.20, 0.20, 0.20, 0.21, 0.21, 0.21, 0.22, 0.22, 0.22,  
+    # Male  
+    0.15, 0.15, 0.16, 0.16, 0.17, 0.17, 0.18, 0.18, 0.19, 0.19,   
+    0.20, 0.20, 0.20, 0.21, 0.21, 0.21, 0.22, 0.22, 0.22,  
+    # Female  
+    0.15, 0.15, 0.16, 0.16, 0.17, 0.17, 0.18, 0.18, 0.19, 0.19,   
+    0.20, 0.20, 0.20, 0.21, 0.21, 0.21, 0.22, 0.22, 0.22,  
+    # Older adults  
+    0.30, 0.32, 0.35, 0.36, 0.38, 0.39, 0.40, 0.41, 0.42, 0.42,   
+    0.43, 0.43, 0.43, 0.44, 0.44, 0.44, 0.45, 0.45, 0.45,  
+    # Young adults  
+    0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16,   
+    0.17, 0.18, 0.19, 0.20, 0.21, 0.22, 0.23, 0.24, 0.25  
+  )  
+) %>% select(-ID)  
+
+# Create the gallbladder dataset  
+# Create the gallbladder dataset  
+gallbladder_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Gallbladder",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.10, 0.10, 0.10, 0.10, 0.11, 0.11, 0.12, 0.12, 0.12, 0.13,   
+    0.13, 0.13, 0.14, 0.14, 0.14, 0.15, 0.15, 0.15, 0.15,  
+    # Male  
+    0.10, 0.10, 0.10, 0.10, 0.11, 0.11, 0.12, 0.12, 0.12, 0.13,   
+    0.13, 0.13, 0.14, 0.14, 0.14, 0.15, 0.15, 0.15, 0.15,  
+    # Female  
+    0.10, 0.10, 0.10, 0.10, 0.11, 0.11, 0.12, 0.12, 0.12, 0.13,   
+    0.13, 0.13, 0.14, 0.14, 0.14, 0.15, 0.15, 0.15, 0.15,  
+    # Older adults  
+    0.25, 0.25, 0.25, 0.26, 0.27, 0.27, 0.28, 0.28, 0.28, 0.29,   
+    0.29, 0.29, 0.30, 0.30, 0.30, 0.31, 0.31, 0.31, 0.30,  
+    # Young adults  
+    0.05, 0.05, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11, 0.12,   
+    0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.20, 0.20  
+  )  
+) %>% select(-ID)  
+
+# Create the anorectal dataset  
+anorectal_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Anorectal",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.85, 0.87, 0.88, 0.89, 0.90, 0.92, 0.93, 0.94, 0.95, 0.96,   
+    0.97, 0.98, 0.99, 1.00, 1.02, 1.04, 1.06, 1.08, 1.00,  
+    # Male  
+    0.65, 0.80, 0.85, 0.88, 0.90, 0.92, 0.94, 0.95, 0.96, 0.97,   
+    0.98, 0.99, 1.00, 1.02, 1.05, 1.07, 1.08, 1.06, 0.85,  
+    # Female  
+    0.65, 0.75, 0.78, 0.80, 0.82, 0.85, 0.87, 0.88, 0.89, 0.90,   
+    0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99, 0.85,  
+    # Older adults  
+    1.60, 1.95, 1.97, 1.98, 1.99, 2.00, 2.00, 2.00, 2.00, 2.00,   
+    2.01, 2.01, 2.02, 2.02, 2.03, 2.04, 2.04, 2.05, 2.00,  
+    # Young adults  
+    0.50, 0.55, 0.60, 0.62, 0.65, 0.67, 0.70, 0.72, 0.75, 0.77,   
+    0.80, 0.85, 0.87, 0.92, 0.95, 0.97, 0.98, 0.99, 0.90  
+  )  
+) %>% select(-ID)  
+
+# Create the ileum dataset  
+ileum_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Ileum",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.40, 0.41, 0.42, 0.43, 0.44, 0.45, 0.46, 0.47, 0.48, 0.49,   
+    0.50, 0.51, 0.52, 0.53, 0.54, 0.55, 0.56, 0.57, 0.58,  
+    # Male  
+    0.45, 0.45, 0.46, 0.47, 0.48, 0.49, 0.50, 0.51, 0.52, 0.53,   
+    0.54, 0.55, 0.56, 0.57, 0.58, 0.59, 0.60, 0.61, 0.62,  
+    # Female  
+    0.35, 0.36, 0.37, 0.38, 0.39, 0.40, 0.41, 0.42, 0.43, 0.44,   
+    0.45, 0.46, 0.47, 0.48, 0.49, 0.50, 0.51, 0.52, 0.53,  
+    # Older adults  
+    1.40, 1.42, 1.44, 1.46, 1.48, 1.49, 1.50, 1.51, 1.52, 1.53,   
+    1.54, 1.55, 1.56, 1.57, 1.58, 1.59, 1.60, 1.60, 1.60,  
+    # Young adults  
+    0.15, 0.17, 0.19, 0.20, 0.21, 0.22, 0.23, 0.24, 0.25, 0.26,   
+    0.27, 0.28, 0.29, 0.30, 0.31, 0.32, 0.33, 0.34, 0.35  
+  )  
+) %>% select(-ID)  
+
+# Create the stomach dataset  
+stomach_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Stomach",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.20, 0.22, 0.24, 0.25, 0.27, 0.28, 0.30, 0.31, 0.33, 0.34,   
+    0.36, 0.37, 0.38, 0.40, 0.41, 0.43, 0.44, 0.45, 0.45,  
+    # Male  
+    0.25, 0.26, 0.28, 0.30, 0.32, 0.33, 0.35, 0.36, 0.38, 0.39,   
+    0.41, 0.42, 0.43, 0.45, 0.46, 0.48, 0.49, 0.50, 0.50,  
+    # Female  
+    0.20, 0.22, 0.24, 0.25, 0.27, 0.28, 0.30, 0.31, 0.33, 0.34,   
+    0.36, 0.37, 0.38, 0.40, 0.41, 0.43, 0.44, 0.45, 0.45,  
+    # Older adults  
+    0.90, 0.92, 0.95, 0.97, 0.98, 0.99, 1.00, 1.00, 1.01, 1.02,   
+    1.03, 1.03, 1.04, 1.04, 1.05, 1.05, 1.06, 1.06, 1.05,  
+    # Young adults  
+    0.10, 0.12, 0.15, 0.17, 0.19, 0.20, 0.22, 0.25, 0.28, 0.30,   
+    0.35, 0.38, 0.40, 0.95, 1.00, 1.02, 1.05, 1.08, 1.10  
+  )  
+) %>% select(-ID)  
+
+# Create the jejunum dataset  
+jejunum_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Jejunum",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,   
+    0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,  
+    # Male  
+    0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,   
+    0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,  
+    # Female  
+    0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,   
+    0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,  
+    # Older adults  
+    0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10,   
+    0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10,  
+    # Young adults  
+    0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,   
+    0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05  
+  )  
+) %>% select(-ID)  
+
+# Create the liver dataset  
+liver_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Liver",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.15, 0.16, 0.16, 0.16, 0.16, 0.17, 0.17, 0.17, 0.17, 0.17,   
+    0.17, 0.17, 0.17, 0.17, 0.16, 0.16, 0.16, 0.16, 0.15,  
+    # Male  
+    0.15, 0.16, 0.16, 0.16, 0.16, 0.17, 0.17, 0.17, 0.17, 0.17,   
+    0.17, 0.17, 0.17, 0.17, 0.16, 0.16, 0.16, 0.16, 0.15,  
+    # Female  
+    0.15, 0.15, 0.15, 0.15, 0.15, 0.16, 0.16, 0.16, 0.16, 0.16,   
+    0.16, 0.16, 0.16, 0.16, 0.15, 0.15, 0.15, 0.15, 0.15,  
+    # Older adults  
+    0.30, 0.32, 0.33, 0.33, 0.34, 0.34, 0.35, 0.35, 0.35, 0.35,   
+    0.35, 0.35, 0.34, 0.34, 0.33, 0.33, 0.32, 0.32, 0.30,  
+    # Young adults  
+    0.10, 0.10, 0.10, 0.10, 0.11, 0.11, 0.12, 0.12, 0.12, 0.12,   
+    0.12, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12, 0.12  
+  )  
+) %>% select(-ID)  
+
+# Create the esophagus dataset  
+esophagus_data <- fabricate(  
+  N = 5 * 19,  
+  Organ = "Esophagus",  
+  Demographic = rep(c("Overall", "Male", "Female", "Older adults", "Young adults"), each = 19),  
+  Year = rep(2001:2019, times = 5),  
+  IncidenceRate = c(  
+    # Overall  
+    0.10, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.20,   
+    0.21, 0.22, 0.23, 0.24, 0.25, 0.26, 0.27, 0.28, 0.28,  
+    # Male  
+    0.15, 0.18, 0.20, 0.22, 0.24, 0.25, 0.26, 0.27, 0.28, 0.30,   
+    0.32, 0.33, 0.34, 0.35, 0.37, 0.40, 0.42, 0.45, 0.46,  
+    # Female  
+    0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11, 0.12, 0.14, 0.15,   
+    0.16, 0.17, 0.18, 0.19, 0.20, 0.21, 0.22, 0.23, 0.23,  
+    # Older adults  
+    0.20, 0.28, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70,   
+    0.75, 0.80, 0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.10,  
+    # Young adults  
+    0.05, 0.07, 0.09, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16,   
+    0.18, 0.20, 0.22, 0.25, 0.27, 0.30, 0.33, 0.35, 0.35  
+  )  
+) %>% select(-ID)  
+
+# Combine all datasets  
+gi_net_data <- bind_rows(  
+  pancreas_data,  
+  appendix_data,  
+  duodenum_data,  
+  colon_data,  
+  cecum_data,  
+  biliary_tract_data,  
+  gallbladder_data,  
+  anorectal_data,  
+  ileum_data,  
+  stomach_data,  
+  jejunum_data,  
+  liver_data,  
+  esophagus_data  
+)  
+
+# Rename "Older adults" and "Young adults" for better formatting in plots  
+combined_dataset <- gi_net_data %>%  
+  mutate(Demographic = case_when(  
+    Demographic == "Older adults" ~ "Older Adults",  
+    Demographic == "Young adults" ~ "Young Adults",  
+    TRUE ~ Demographic  
+  ))  |> 
+  as_tibble()
+
+```
+
+
+<br>
+
+### A part of fake dataset (tidy version)
+```{r}
+set.seed(2025)
+combined_dataset %>% 
+        sample_n(10)
+
+```
+
+
+<br>
+
+
+**Possible strategy:**  
+
+
+<br>
+
+## R codes for the figures and required data
+
+```{r}
+
+create_demographic_plot <- function(demo_group) {  
+  ggplot(filter(gi_net_data, Demographic == demo_group),   
+         aes(x = Year, y = IncidenceRate, color = Organ, shape = Organ, group = Organ)) +  
+    geom_line() +  
+    geom_point(size = 2) +  
+    theme_minimal() +  
+    labs(  
+      title = paste(demo_group, "GI-NET Incidence Rates (2001-2019)"),  
+      y = "Incidence rate per 100,000 person-years",  
+      x = "Year"  
+    ) +  
+    theme(  
+      legend.position = "bottom",  
+      legend.title = element_blank(),  
+      panel.grid.minor = element_blank(),  
+      axis.title = element_text(face = "bold"),  
+      plot.title = element_text(face = "bold", size = 14)  
+    ) +  
+    scale_color_viridis_d() +   
+    scale_x_continuous(breaks = seq(2001, 2019, 3))  
+}  
+
+# Create multi-panel figure  
+p1 <- create_demographic_plot("Male")  
+p2 <- create_demographic_plot("Female")  
+p3 <- create_demographic_plot("Older Adults")  
+p4 <- create_demographic_plot("Young Adults")  
+
+# Combine into a single figure  
+combined_plot <- plot_grid(  
+  p1, p2, p3, p4,  
+  labels = c("A", "B", "C", "D"),  
+  ncol = 2  
+)  
+```
+
+
+### Fig 1a and Fig 1b
+```{r}
+
+explanatory <- combined_dataset %>% 
+        select(group) %>% 
+        names()
+
+dependent <- "Surv(event_time, event)"
+
+# Fig 1a
+# HRs and median survival for Intention-to-Treat-Pembrolizumab (with finalfit package) for Fig 1a
+
+cox_pembro <- combined_dataset %>% 
+        filter(pembro == "yes") %>% 
+        finalfit::finalfit(dependent = dependent, 
+                           explanatory = explanatory,
+                           add_dependent_label = FALSE) %>% 
+        select(label, levels, my_hr = "HR (univariable)") %>% 
+        mutate(formatted_hr = str_replace_all(my_hr, "^(\\d+\\.\\d+) \\((\\d+\\.\\d+-\\d+\\.\\d+), p[=<](.+?)\\)$", "\\1 (95% CI \\2); p<\\3"),
+               corrected_hr = if_else(levels == "experimental", "0.46 (95% CI, 0.31-0.70); P<0.001", "-"))
+
+
+model_plot_pembro <- survfit(Surv(event_time, event) ~ group, data = combined_dataset %>% filter(pembro == "yes"))
+model_table_pembro <- model_plot_pembro %>% 
+        surv_median() %>% 
+        as_tibble() %>% 
+        mutate(n = if_else(str_detect(strata, "control"), model_plot_pembro$n[1], model_plot_pembro$n[2]),
+               corrected_median = if_else(str_detect(strata, "control"), 11.2, 24.8))
+        
+
+
+cox_pembro_hr <- cox_pembro %>% 
+        filter(levels == "experimental") %>% 
+        pull(corrected_hr)
+
+
+fig_1a <- model_table_pembro %>% 
+        mutate(strata = if_else(strata == "group=control", "Control", "Selpercatinib"),
+               label = glue::glue("{strata}\n(N={n})"),
+               label = fct_rev(label)) %>% 
+        ggplot(aes(label, y = corrected_median, fill = label)) +
+        geom_col(width = .9) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 6, ymax = 12),
+            fill = "lightgray", alpha = 0.1) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 18, ymax = 24),
+            fill = "lightgray", alpha = 0.1) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 30, ymax = 36),
+            fill = "lightgray", alpha = 0.1) +
+        geom_col(width = .9) +
+        scale_fill_manual(values = c(nejm_orange, nejm_blue)) +
+        scale_y_continuous(limits = c(0, 36), breaks = seq(0,36,6), expand = c(0,0)) +
+        geom_text(aes(label = corrected_median, color = label), vjust = -0.5, size = 4, fontface = "bold") +
+        labs(x = NULL,
+             y = "\nMonths",
+             subtitle = glue::glue("HR for disease progression or death,\n{cox_pembro_hr}"),
+             title = "Intention-to-Treat-Pembrolizumab\nPopulation") +
+        theme(legend.position = "none",
+              panel.grid = element_blank(),
+              plot.title = element_text(hjust = .5, size = 11),
+              plot.subtitle = element_text(hjust = .5, size = 10, color = "darkgray"),
+              axis.ticks.x = element_blank(),
+              axis.ticks.length.y = unit(.25, "cm"),
+              axis.text.x = element_text(size = 10),
+              panel.border = element_blank(),
+              axis.line = element_line(color = "gray"))
+
+
+# Fig 1b
+# HR and median survival for Overall Intention-to-Treat Population (with finalfit package) for Fig 1b
+
+cox_all <- combined_dataset %>% 
+        finalfit::finalfit(dependent = dependent, 
+                           explanatory = explanatory,
+                           add_dependent_label = FALSE) %>% 
+        select(label, levels, my_hr = "HR (univariable)") %>% 
+        mutate(formatted_hr = str_replace_all(my_hr, "^(\\d+\\.\\d+) \\((\\d+\\.\\d+-\\d+\\.\\d+), p[=<](.+?)\\)$", "\\1 (95% CI \\2); p<\\3"),
+               corrected_hr = if_else(levels == "experimental", "0.48 (95% CI, 0.33-0.70); P<0.001", "-"))
+
+
+model_plot_all <- survfit(Surv(event_time, event) ~ group, data = combined_dataset)
+model_table_all <- model_plot_all %>% 
+        surv_median() %>% 
+        as_tibble() %>% 
+        mutate(n = if_else(strata == "group=control", model_plot_all$n[1], model_plot_all$n[2]),
+               corrected_median = if_else(strata == "group=control", 11.2, 24.8))
+
+
+cox_all_hr <- cox_all %>% 
+        filter(levels == "experimental") %>% 
+        pull(corrected_hr)
+
+
+# y-axis has no value. It would be better do this with facet_wrap("free_y"), But I realized this very late. 
+# So, I removed y-axis data from second plot.
+fig_1b <- model_table_all %>% 
+        mutate(strata = if_else(str_detect(strata, "control"), "Control", "Selpercatinib"),
+               label = glue::glue("{strata}\n(N={n})"),
+               label = fct_rev(label)) %>% 
+        ggplot(aes(label, y = corrected_median, fill = label)) +
+        geom_col(width = .8) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 6, ymax = 12),
+            fill = "lightgray", alpha = 0.1) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 18, ymax = 24),
+            fill = "lightgray", alpha = 0.1) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 30, ymax = 36),
+            fill = "lightgray", alpha = 0.1) +
+        geom_col(width = .8) +
+        scale_fill_manual(values = c(nejm_orange, nejm_blue)) +
+        scale_y_continuous(limits = c(0, 36), breaks = seq(0,36,6), expand = c(0,0)) +
+        geom_text(aes(label = corrected_median, color = label), vjust = -0.5, size = 4, fontface = "bold") +
+        labs(x = NULL,
+             y = NULL,
+             subtitle = glue::glue("HR for disease progression or death,\n{cox_all_hr}"),
+             title = "Overall Intention-to-Treat\nPopulation") +
+        theme(legend.position = "none",
+              panel.grid = element_blank(),
+              plot.title = element_text(hjust = .5, size = 11),
+              plot.subtitle = element_text(hjust = .5, size = 10, color = "darkgray"),
+              axis.ticks = element_blank(),
+              axis.ticks.length.y = unit(.25, "cm"),
+              axis.text.x = element_text(size = 10),
+              panel.border = element_blank(),
+              axis.line.x = element_line(color = "gray"),
+              axis.text.y = element_blank())
+
+
+# Combine Fig 1a and Fig 1b
+
+fig_1 <- cowplot::plot_grid(fig_1a, fig_1b, ncol = 2)
+
+# Add shared title to fig 1
+
+fig_1_title <- ggdraw() + 
+  draw_label(
+    "Median Progression-free Survival",
+    fontface = 'bold',
+    hjust = .5,
+    size = 11
+  )
+
+
+fig_1_cow <- plot_grid(
+  fig_1_title, fig_1,
+  ncol = 1,
+  rel_heights = c(0.1, 1)
+)
+
+```
+
+
+<br>
+
+
+```{r}
+### response
+response_summary <- combined_dataset %>% 
+        filter(pembro == "yes") %>% 
+        mutate(objective_response = case_match(response,
+                          c("CR", "PR") ~ "yes",
+                          c("PD", "SD", "NE") ~ "no")) %>% 
+        group_by(group) %>% 
+        summarise(response_rate = mean(objective_response == "yes", na.rm = TRUE),
+                  lower_ci = binom.test(sum(objective_response == "yes"), length(objective_response), conf.level = 0.95)$conf.int[1],
+                  upper_ci = binom.test(sum(objective_response == "yes"), length(objective_response), conf.level = 0.95)$conf.int[2]) %>% 
+        mutate(across(-group, ~round(. * 100)))
+
+
+
+
+
+
+fig_2 <- response_summary %>% 
+        mutate(group = if_else(str_detect(group, "control"), "Control", "Selpercatinib"),
+               group = fct_rev(group),
+               label_text = glue::glue("{response_rate}\n(95% CI, {lower_ci}-{upper_ci})")) %>% 
+        ggplot(aes(group, y = response_rate, fill = group)) +
+        geom_col(width = .7) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 10, ymax = 20),
+            fill = "lightgray", alpha = 0.1) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 30, ymax = 40),
+            fill = "lightgray", alpha = 0.1) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 50, ymax = 60),
+            fill = "lightgray", alpha = 0.1) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 70, ymax = 80),
+            fill = "lightgray", alpha = 0.1) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 90, ymax = 100),
+            fill = "lightgray", alpha = 0.1) +
+        geom_col(width = .7) +
+        scale_fill_manual(values = c(nejm_orange, nejm_blue)) +
+        scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 10), expand = c(0,0)) +
+        geom_text(aes(label = label_text, color = group), vjust = -0.2, size = 4, fontface = "bold") +
+        labs(x = NULL,
+             y = "\nPercentage of Patients",
+             subtitle = "Intention-to-Treat-Pembrolizumab Population",
+             title = "\nObjective Response") +
+        theme(legend.position = "none",
+              panel.grid = element_blank(),
+              plot.title = element_text(hjust = .5, size = 11, face = "bold"),
+              plot.subtitle = element_text(hjust = .5, size = 10),
+              axis.ticks.x = element_blank(),
+              axis.ticks.length.y = unit(.25, "cm"),
+              axis.text.x = element_text(size = 10),
+              panel.border = element_blank(),
+              axis.line = element_line(color = "gray"))
+```
+
+
+```{r}
+### response duration
+response_duration_summary <- combined_dataset %>% 
+        filter(pembro == "yes") %>% 
+        group_by(group) %>% 
+        summarise(median = median(duration_response, na.rm = TRUE),
+                   lower_ci = t.test(duration_response, conf.level = 0.95)$conf.int[1],
+                   upper_ci = t.test(duration_response, conf.level = 0.95)$conf.int[2]) %>% 
+        mutate(corrected_median = if_else(group == "control", 11.5, 24.2),
+               corrected_lower_ci = if_else(group == "control", 9.7, 17.9),
+               corrected_upper_ci = if_else(group == "control", as.character(23.3), "NE")) 
+      
+
+fig_3 <- response_duration_summary %>% 
+        mutate(group = if_else(str_detect(group, "control"), "Control", "Selpercatinib"),
+               group = fct_rev(group),
+               label_text = glue::glue("{corrected_median}\n(95% CI, {corrected_lower_ci}-{corrected_upper_ci})")) %>% 
+        ggplot(aes(group, y = corrected_median, fill = group)) +
+        geom_col(width = .7) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 6, ymax = 12),
+            fill = "lightgray", alpha = 0.1) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 18, ymax = 24),
+            fill = "lightgray", alpha = 0.1) +
+        geom_rect(aes(xmin = 0, xmax = 3, ymin = 30, ymax = 36),
+            fill = "lightgray", alpha = 0.1) +
+        geom_col(width = .7) +
+        scale_fill_manual(values = c(nejm_orange, nejm_blue)) +
+        scale_y_continuous(limits = c(0, 36), breaks = seq(0, 36, 6), expand = c(0,0)) +
+        geom_text(aes(label = label_text, color = group), vjust = -0.2, size = 4, fontface = "bold") +
+        labs(x = NULL,
+             y = "\nMonths",
+             subtitle = "Intention-to-Treat-Pembrolizumab Population",
+             title = "\nMedian Response Duration") +
+        theme(legend.position = "none",
+              panel.grid = element_blank(),
+              plot.title = element_text(hjust = .5, size = 11, face = "bold"),
+              plot.subtitle = element_text(hjust = .5, size = 10),
+              axis.ticks.x = element_blank(),
+              axis.ticks.length.y = unit(.25, "cm"),
+              axis.text.x = element_text(size = 10),
+              panel.border = element_blank(),
+              axis.line = element_line(color = "gray"))
+```
+
+
+```{r}
+
+
+# COMBINE all 3 plots and add horizontal orange lines
+
+combined_plot <- cowplot::plot_grid(fig_1_cow, fig_2, fig_3, ncol = 1)
+
+final_replica <- ggdraw() + 
+        draw_plot(combined_plot) +
+        draw_line(
+                x = c(0.05, .95),                    # to add horizontal line between facet names manually 
+                y = c(.33, .33),
+                lwd = .5,
+                colour = nejm_orange) + 
+        draw_line(
+                x = c(0.05, .95),                    # to add horizontal line between facet names manually 
+                y = c(.66, .66),
+                lwd = .5,
+                colour = nejm_orange) 
+
+
+
+
+
+### SAVE FIGURE
+ggsave(final_replica,
+       file = file.path ("w13_replica.jpg"),
+       dpi = 300,
+       width = 6,
+       height = 12)
+
+
+```
+
+
+<br>
+
+### Final replica
+![replica Visual abstract](w13_replica.jpg)
+
+<br>
+
+### Some personal comments:   
+
+<br><br>

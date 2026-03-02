@@ -11,6 +11,18 @@ is a part of
   
  <br><br>
 
+**NOTE:** Due to the widespread adoption of LLMs, 
+the DataVizMed project is no longer needed. 
+
+<br>
+
+If you have any specific questions, 
+please feel free to contact, 
+but please note that this project has been 
+**discontinued as of 2025**.
+
+
+<br><br><br><br>
 <u>The aims</u>
 
  share informative, elegant visualization from high-quality articles  
